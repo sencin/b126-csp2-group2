@@ -7,6 +7,8 @@ import com.joysistvi.ursa.view.*;
 
 import java.util.Scanner;
 
+import static com.joysistvi.ursa.view.MainMenuView.showMenu;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -29,51 +31,21 @@ public class Main {
         boolean running = true;
 
         while (running) {
-
-            System.out.println("\n========== URSA ==========");
-            System.out.println("1. Students");
-            System.out.println("2. Courses");
-            System.out.println("3. Schedules");
-            System.out.println("4. Guardians");
-            System.out.println("5. Student Schedules");
-            System.out.println("6. Attendance Logs");
-            System.out.println("0. Exit");
-            System.out.print("Choice: ");
-
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice = showMenu();
 
             switch (choice) {
-                case 1:
-                    studentController.start();
-                    break;
-
-                case 2:
-                    courseController.start();
-                    break;
-
-                case 3:
-                    scheduleController.start();
-                    break;
-
-                case 4:
-                    guardianController.start();
-                    break;
-
-                case 5:
-                    studentScheduleController.start();
-                    break;
-
-                case 6:
-                    attendanceLogController.start();
-                    break;
-
+                case 1: studentController.start(); break;
+                case 2: courseController.start(); break;
+                case 3: scheduleController.start(); break;
+                case 4: guardianController.start(); break;
+                case 5: studentScheduleController.start(); break;
+                case 6: attendanceLogController.start(); break;
                 case 0:
                     running = false;
                     System.out.println("Goodbye!");
                     break;
-
                 default:
-                    System.out.println("Invalid option.");
+                    System.out.println("Invalid option. Please try again.");
             }
         }
 
