@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
+
 public class AttendanceLogView {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -87,13 +89,27 @@ public class AttendanceLogView {
 
     public void displayAttendanceLog(AttendanceLog attendanceLog) {
 
-        System.out.println("----------------------------");
-        System.out.println("ID        : " + attendanceLog.getId());
-        System.out.println("Student ID: " + attendanceLog.getStudentId());
-        System.out.println("Schedule  : " + attendanceLog.getScheduleId());
-        System.out.println("Timestamp : " + attendanceLog.getTimestamp());
-        System.out.println("Action    : " + attendanceLog.getAction());
-        System.out.println("----------------------------");
+        int idW = 5, stuW = 10, schedW = 10, timeW = 20, actW = 8;
+
+        String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", stuW + 2) + "+" +
+                repeat("-", schedW + 2) + "+" +
+                repeat("-", timeW + 2) + "+" +
+                repeat("-", actW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + stuW + "s | %-" + schedW + "s | %-" + timeW + "s | %-" + actW + "s |%n";
+
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Student ID", "Schedule", "Timestamp", "Action");
+        System.out.println(border);
+        System.out.format(rowFormat,
+                attendanceLog.getId(),
+                attendanceLog.getStudentId(),
+                attendanceLog.getScheduleId(),
+                attendanceLog.getTimestamp(),
+                attendanceLog.getAction()
+        );
+        System.out.println(border);
     }
 
     public void displayAttendanceLogs(List<AttendanceLog> attendanceLogs) {

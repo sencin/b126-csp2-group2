@@ -1,9 +1,9 @@
 package com.joysistvi.ursa.view;
-
 import com.joysistvi.ursa.model.Guardian;
-
 import java.util.List;
 import java.util.Scanner;
+
+import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 
 public class GuardianView {
 
@@ -97,16 +97,27 @@ public class GuardianView {
 
     public void displayGuardian(Guardian guardian) {
 
-        System.out.println("----------------------------");
-        System.out.println("ID: " + guardian.getId());
-        System.out.println("Student ID: " + guardian.getStudentId());
-        System.out.println("First Name: " + guardian.getFirstName());
-        System.out.println("Last Name: " + guardian.getLastName());
-        System.out.println("Relationship: " + guardian.getRelationship());
-        System.out.println("Phone Number: " + guardian.getPhoneNumber());
-        System.out.println("----------------------------");
-    }
+        int idW = 5, stuW = 10, nameW = 12, relW = 12, phoneW = 15;
 
+        String border = "+" + repeat("-", idW + 2) + "+" + repeat("-", stuW + 2) + "+" +
+                repeat("-", nameW + 2) + "+" + repeat("-", nameW + 2) + "+" +
+                repeat("-", relW + 2) + "+" + repeat("-", phoneW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + stuW + "s | %-" + nameW + "s | %-" + nameW + "s | %-" + relW + "s | %-" + phoneW + "s |%n";
+
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Student ID", "First", "Last", "Relation", "Phone");
+        System.out.println(border);
+        System.out.format(rowFormat,
+                guardian.getId(),
+                guardian.getStudentId(),
+                guardian.getFirstName(),
+                guardian.getLastName(),
+                guardian.getRelationship(),
+                guardian.getPhoneNumber()
+        );
+        System.out.println(border);
+    }
     public void displayGuardians(List<Guardian> guardians) {
 
         if (guardians.isEmpty()) {

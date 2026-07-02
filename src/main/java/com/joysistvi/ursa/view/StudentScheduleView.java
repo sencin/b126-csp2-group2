@@ -5,6 +5,8 @@ import com.joysistvi.ursa.model.StudentSchedule;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
+
 public class StudentScheduleView {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -87,15 +89,28 @@ public class StudentScheduleView {
 
     public void displayStudentSchedule(StudentSchedule studentSchedule) {
 
-        System.out.println("----------------------------");
-        System.out.println("ID            : " + studentSchedule.getId());
-        System.out.println("Student ID    : " + studentSchedule.getStudentId());
-        System.out.println("Schedule ID   : " + studentSchedule.getScheduleId());
-        System.out.println("Academic Year : " + studentSchedule.getAcademicYear());
-        System.out.println("Semester      : " + studentSchedule.getSemester());
-        System.out.println("----------------------------");
-    }
+        int idW = 5, stuW = 10, schedW = 10, acadW = 12, semW = 8;
 
+        String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", stuW + 2) + "+" +
+                repeat("-", schedW + 2) + "+" +
+                repeat("-", acadW + 2) + "+" +
+                repeat("-", semW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + stuW + "s | %-" + schedW + "s | %-" + acadW + "s | %-" + semW + "s |%n";
+
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Student ID", "Schedule", "Acad Year", "Sem");
+        System.out.println(border);
+        System.out.format(rowFormat,
+                studentSchedule.getId(),
+                studentSchedule.getStudentId(),
+                studentSchedule.getScheduleId(),
+                studentSchedule.getAcademicYear(),
+                studentSchedule.getSemester()
+        );
+        System.out.println(border);
+    }
     public void displayStudentSchedules(List<StudentSchedule> studentSchedules) {
 
         if (studentSchedules.isEmpty()) {

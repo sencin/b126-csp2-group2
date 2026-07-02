@@ -1,11 +1,14 @@
 package com.joysistvi.ursa.view;
 
 import com.joysistvi.ursa.model.Schedule;
+import com.joysistvi.ursa.utils.ConsoleTableUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
+
+import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 
 public class ScheduleView {
 
@@ -91,17 +94,32 @@ public class ScheduleView {
     }
 
     public void displaySchedule(Schedule schedule) {
+        int idW = 5, crsW = 8, instW = 15, dateW = 10, startW = 8, endW = 8;
 
-        System.out.println("----------------------------");
-        System.out.println("ID           : " + schedule.getId());
-        System.out.println("Course ID    : " + schedule.getCourseId());
-        System.out.println("Instructor   : " + schedule.getInstructorName());
-        System.out.println("Date         : " + schedule.getDate());
-        System.out.println("Start Time   : " + schedule.getStartTime());
-        System.out.println("End Time     : " + schedule.getEndTime());
-        System.out.println("----------------------------");
+
+        String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", crsW + 2) + "+" +
+                repeat("-", instW + 2) + "+" +
+                repeat("-", dateW + 2) + "+" +
+                repeat("-", startW + 2) + "+" +
+                repeat("-", endW + 2) + "+";
+
+
+        String rowFormat = "| %-" + idW + "s | %-" + crsW + "s | %-" + instW + "s | %-" + dateW + "s | %-" + startW + "s | %-" + endW + "s |%n";
+
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Course ID", "Instructor", "Date", "Start", "End");
+        System.out.println(border);
+        System.out.format(rowFormat,
+                schedule.getId(),
+                schedule.getCourseId(),
+                schedule.getInstructorName(),
+                schedule.getDate(),
+                schedule.getStartTime(),
+                schedule.getEndTime()
+        );
+        System.out.println(border);
     }
-
     public void displaySchedules(List<Schedule> schedules) {
 
         if (schedules.isEmpty()) {

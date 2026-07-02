@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
+
 public class StudentView {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -123,17 +125,35 @@ public class StudentView {
 
     public void displayStudent(Student student) {
 
-        System.out.println("----------------------------");
-        System.out.println("ID             : " + student.getId());
-        System.out.println("First Name     : " + student.getFirstName());
-        System.out.println("Last Name      : " + student.getLastName());
-        System.out.println("Middle Name    : " + student.getMiddleName());
-        System.out.println("Email          : " + student.getEmail());
-        System.out.println("Gender         : " + student.getGender());
-        System.out.println("Account Status : " + student.getAccountStatus());
-        System.out.println("Year Level     : " + student.getYearLevel());
-        System.out.println("Date of Birth  : " + student.getDateOfBirth());
-        System.out.println("----------------------------");
+        int idW = 5, fnW = 12, lnW = 12, mnW = 10, emW = 20, genW = 6, statW = 10, yrW = 5, dobW = 10;
+
+        String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", fnW + 2) + "+" +
+                repeat("-", lnW + 2) + "+" +
+                repeat("-", mnW + 2) + "+" +
+                repeat("-", emW + 2) + "+" +
+                repeat("-", genW + 2) + "+" +
+                repeat("-", statW + 2) + "+" +
+                repeat("-", yrW + 2) + "+" +
+                repeat("-", dobW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + fnW + "s | %-" + lnW + "s | %-" + mnW + "s | %-" + emW + "s | %-" + genW + "s | %-" + statW + "s | %-" + yrW + "s | %-" + dobW + "s |%n";
+
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "First", "Last", "Middle", "Email", "Gender", "Status", "Year", "Birth Date");
+        System.out.println(border);
+        System.out.format(rowFormat,
+                student.getId(),
+                student.getFirstName(),
+                student.getLastName(),
+                student.getMiddleName(),
+                student.getEmail(),
+                student.getGender(),
+                student.getAccountStatus(),
+                student.getYearLevel(),
+                student.getDateOfBirth()
+        );
+        System.out.println(border);
     }
 
     public void displayStudents(List<Student> students) {

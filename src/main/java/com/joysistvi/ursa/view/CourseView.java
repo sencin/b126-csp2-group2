@@ -2,8 +2,11 @@ package com.joysistvi.ursa.view;
 
 import com.joysistvi.ursa.model.Course;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+
+import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 
 public class CourseView {
 
@@ -64,12 +67,23 @@ public class CourseView {
         return Integer.parseInt(scanner.nextLine());
     }
 
+
     public void displayCourse(Course course) {
-        System.out.println("----------------------------");
-        System.out.println("ID           : " + course.getId());
-        System.out.println("Course Code  : " + course.getCourseCode());
-        System.out.println("Course Title : " + course.getCourseTitle());
-        System.out.println("----------------------------");
+        int idWidth = 5;
+        int codeWidth = 12;
+        int titleWidth = 30;
+
+        String border = "+" + repeat("-", idWidth + 2) + "+" +
+                repeat("-", codeWidth + 2) + "+" +
+                repeat("-", titleWidth + 2) + "+";
+
+        String rowFormat = "| %-" + idWidth + "s | %-" + codeWidth + "s | %-" + titleWidth + "s |%n";
+
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Code", "Title");
+        System.out.println(border);
+        System.out.format(rowFormat, course.getId(), course.getCourseCode(), course.getCourseTitle());
+        System.out.println(border);
     }
 
     public void displayCourses(List<Course> courses) {
