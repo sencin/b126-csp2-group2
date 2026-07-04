@@ -5,6 +5,7 @@ import com.joysistvi.ursa.service.StudentService;
 import com.joysistvi.ursa.view.StudentView;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 public class StudentController {
@@ -89,7 +90,7 @@ public class StudentController {
             return;
         }
 
-        studentView.displayStudent(student);
+        studentView.displayStudents(Collections.singletonList(student));
     }
 
     private void updateStudent() throws SQLException {

@@ -123,8 +123,7 @@ public class StudentView {
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public void displayStudent(Student student) {
-
+    public void displayStudents(List<Student> students) {
         int idW = 5, fnW = 12, lnW = 12, mnW = 10, emW = 20, genW = 6, statW = 10, yrW = 5, dobW = 10;
 
         String border = "+" + repeat("-", idW + 2) + "+" +
@@ -142,31 +141,19 @@ public class StudentView {
         System.out.println(border);
         System.out.format(rowFormat, "ID", "First", "Last", "Middle", "Email", "Gender", "Status", "Year", "Birth Date");
         System.out.println(border);
-        System.out.format(rowFormat,
-                student.getId(),
-                student.getFirstName(),
-                student.getLastName(),
-                student.getMiddleName(),
-                student.getEmail(),
-                student.getGender(),
-                student.getAccountStatus(),
-                student.getYearLevel(),
-                student.getDateOfBirth()
-        );
-        System.out.println(border);
-    }
-
-    public void displayStudents(List<Student> students) {
-
-        if (students.isEmpty()) {
-            System.out.println("No students found.");
-            return;
-        }
-
-        System.out.println("\n===== STUDENT LIST =====");
-
         for (Student student : students) {
-            displayStudent(student);
+            System.out.format(rowFormat,
+                    student.getId(),
+                    student.getFirstName(),
+                    student.getLastName(),
+                    student.getMiddleName(),
+                    student.getEmail(),
+                    student.getGender(),
+                    student.getAccountStatus(),
+                    student.getYearLevel(),
+                    student.getDateOfBirth()
+            );
         }
+        System.out.println(border);
     }
 }
