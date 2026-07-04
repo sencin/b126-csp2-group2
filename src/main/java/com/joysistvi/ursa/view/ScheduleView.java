@@ -1,6 +1,8 @@
 package com.joysistvi.ursa.view;
 
+import com.joysistvi.ursa.model.Course;
 import com.joysistvi.ursa.model.Schedule;
+import com.joysistvi.ursa.model.Student;
 import com.joysistvi.ursa.utils.ConsoleTableUtils;
 
 import java.time.LocalDate;
@@ -13,6 +15,9 @@ import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 public class ScheduleView {
 
     private final Scanner scanner = new Scanner(System.in);
+    private final StudentView studentView = new StudentView();
+    private final CourseView courseView = new CourseView();
+
 
     public int menu() {
         System.out.println("\n===== SCHEDULES =====");
@@ -27,10 +32,10 @@ public class ScheduleView {
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public Schedule addNewSchedule() {
+    public Schedule addNewSchedule(List<Course> courses) {
 
         System.out.println("\n===== ADD SCHEDULE =====");
-
+        courseView.displayCourses(courses);
         System.out.print("Course ID: ");
         int courseId = Integer.parseInt(scanner.nextLine());
 
@@ -122,15 +127,43 @@ public class ScheduleView {
     }
     public void displaySchedules(List<Schedule> schedules) {
 
-        if (schedules.isEmpty()) {
+        if (schedules == null || schedules.isEmpty()) {
             System.out.println("No schedules found.");
             return;
         }
 
+        int idW = 5;
+        int crsW = 40;
+        int instW = 20;
+        int dateW = 12;
+        int startW = 8;
+        int endW = 8;
+
+        String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", crsW + 2) + "+" +
+                repeat("-", instW + 2) + "+" +
+                repeat("-", dateW + 2) + "+" +
+                repeat("-", startW + 2) + "+" +
+                repeat("-", endW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + crsW + "s | %-" + instW + "s | %-" + dateW + "s | %-" + startW + "s | %-" + endW + "s |%n";
+
         System.out.println("\n===== SCHEDULE LIST =====");
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Course", "Instructor", "Date", "Start", "End");
+        System.out.println(border);
 
         for (Schedule schedule : schedules) {
-            displaySchedule(schedule);
+            System.out.format(rowFormat,
+                    schedule.getId(),
+                    schedule.getCourseTitle(),
+                    schedule.getInstructorName(),
+                    schedule.getDate(),
+                    schedule.getStartTime(),
+                    schedule.getEndTime()
+            );
         }
+
+        System.out.println(border);
     }
 }

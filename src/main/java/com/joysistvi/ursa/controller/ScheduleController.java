@@ -1,7 +1,11 @@
 package com.joysistvi.ursa.controller;
 
+import com.joysistvi.ursa.model.Course;
 import com.joysistvi.ursa.model.Schedule;
+import com.joysistvi.ursa.model.Student;
+import com.joysistvi.ursa.service.CourseService;
 import com.joysistvi.ursa.service.ScheduleService;
+import com.joysistvi.ursa.service.StudentService;
 import com.joysistvi.ursa.view.ScheduleView;
 
 import java.sql.SQLException;
@@ -10,12 +14,15 @@ import java.util.List;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+    private final StudentService studentService;
     private final ScheduleView scheduleView;
+    private  final CourseService courseService;
 
-    public ScheduleController(ScheduleService scheduleService,
-                              ScheduleView scheduleView) {
+    public ScheduleController(ScheduleService scheduleService, ScheduleView scheduleView, StudentService studentService, CourseService courseService) {
         this.scheduleService = scheduleService;
         this.scheduleView = scheduleView;
+        this.studentService = studentService;
+        this.courseService = courseService;
     }
 
     public void start() {
@@ -64,9 +71,8 @@ public class ScheduleController {
     }
 
     private void addSchedule() throws SQLException {
-
-        Schedule schedule = scheduleView.addNewSchedule();
-
+        List<Course> courses = courseService.getAllCourses();
+        Schedule schedule = scheduleView.addNewSchedule(courses);
         scheduleService.addSchedule(schedule);
 
         System.out.println("Schedule added successfully.");

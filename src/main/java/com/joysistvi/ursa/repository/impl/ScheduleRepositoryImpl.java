@@ -37,7 +37,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     public List<Schedule> getAllSchedules() throws SQLException {
         List<Schedule> schedules = new ArrayList<>();
 
-        String sql = "SELECT * FROM schedules ORDER BY date ASC, start_time ASC";
+        String sql =
+                "SELECT s.id, s.courses_id, c.course_title, " +
+                        "s.instructor_name, s.date, s.start_time, s.end_time " +
+                        "FROM schedules s " +
+                        "INNER JOIN courses c ON s.courses_id = c.id " +
+                        "ORDER BY s.date ASC, s.start_time ASC";
 
         try (Connection conn = DbConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -47,6 +52,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 schedules.add(new Schedule(
                         rs.getInt("id"),
                         rs.getInt("courses_id"),
+                        rs.getString("course_title"),
                         rs.getString("instructor_name"),
                         rs.getDate("date").toLocalDate(),
                         rs.getTime("start_time").toLocalTime(),

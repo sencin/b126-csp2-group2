@@ -19,7 +19,7 @@ public class Main {
 
         CourseController courseController = new CourseController(new CourseService(), new CourseView());
 
-        ScheduleController scheduleController = new ScheduleController(new ScheduleService(), new ScheduleView());
+        ScheduleController scheduleController = new ScheduleController(new ScheduleService(), new ScheduleView(), new StudentService(), new CourseService());
 
         GuardianController guardianController = new GuardianController(new GuardianService(), new GuardianView());
 
