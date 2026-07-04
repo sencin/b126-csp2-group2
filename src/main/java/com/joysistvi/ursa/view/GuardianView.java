@@ -120,15 +120,40 @@ public class GuardianView {
     }
     public void displayGuardians(List<Guardian> guardians) {
 
-        if (guardians.isEmpty()) {
+        if (guardians == null || guardians.isEmpty()) {
             System.out.println("No guardians found.");
             return;
         }
 
+        int idW = 5;
+        int nameW = 40;
+        int contactW = 15;
+        int relationW = 15;
+        int studentW = 10;
+
+        String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", nameW + 2) + "+" +
+                repeat("-", contactW + 2) + "+" +
+                repeat("-", relationW + 2) + "+" +
+                repeat("-", studentW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + nameW + "s | %-" + contactW + "s | %-" + relationW + "s | %-" + studentW + "s |%n";
+
         System.out.println("\n===== GUARDIAN LIST =====");
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Name", "Contact", "Relationship", "Student");
+        System.out.println(border);
 
         for (Guardian guardian : guardians) {
-            displayGuardian(guardian);
+            System.out.format(rowFormat,
+                    guardian.getId(),
+                    guardian.getFirstName() + " " + guardian.getLastName(),
+                    guardian.getPhoneNumber(),
+                    guardian.getRelationship(),
+                    guardian.getStudentId()
+            );
         }
+
+        System.out.println(border);
     }
 }
