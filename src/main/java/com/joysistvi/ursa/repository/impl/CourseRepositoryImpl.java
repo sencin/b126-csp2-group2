@@ -35,18 +35,28 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public Course getCourseById(int id) throws SQLException {
+    public List<Course> getCourseById(int id) throws SQLException {
         String sql = "SELECT * FROM courses WHERE id = ?";
+
+        List<Course> courses = new ArrayList<>();
+
         try (Connection conn = DbConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, id);
+
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new Course(rs.getInt("id"), rs.getString("course_code"), rs.getString("course_title"));
+                while (rs.next()) {
+                    courses.add(new Course(
+                            rs.getInt("id"),
+                            rs.getString("course_code"),
+                            rs.getString("course_title")
+                    ));
                 }
             }
         }
-        return null;
+
+        return courses;
     }
 
     @Override

@@ -80,17 +80,14 @@ public class CourseController {
     }
 
     private void viewCourseById() throws SQLException {
-
         int id = courseView.readCourseId();
+        List<Course> courses = courseService.getCourseById(id);
 
-        Course course = courseService.getCourseById(id);
-
-        if (course == null) {
+        if (courses == null || courses.isEmpty()) {
             System.out.println("Course not found.");
             return;
         }
-
-        courseView.displayCourse(course);
+        courseView.displayCourses(courses);
     }
 
     private void updateCourse() throws SQLException {

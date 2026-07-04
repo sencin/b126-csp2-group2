@@ -23,7 +23,7 @@ public class CourseService {
         return courseRepository.getAllCourses();
     }
 
-    public Course getCourseById(int id) throws SQLException {
+    public List<Course> getCourseById(int id) throws SQLException {
         return courseRepository.getCourseById(id);
     }
 

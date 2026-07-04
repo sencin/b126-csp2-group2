@@ -68,35 +68,30 @@ public class CourseView {
     }
 
 
-    public void displayCourse(Course course) {
-        int idWidth = 5;
-        int codeWidth = 12;
-        int titleWidth = 30;
+    public void displayCourses(List<Course> courses) {
 
-        String border = "+" + repeat("-", idWidth + 2) + "+" +
-                repeat("-", codeWidth + 2) + "+" +
-                repeat("-", titleWidth + 2) + "+";
+        int idW = 5;
+        int codeW = 12;
+        int titleW = 50;
 
-        String rowFormat = "| %-" + idWidth + "s | %-" + codeWidth + "s | %-" + titleWidth + "s |%n";
+        String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", codeW + 2) + "+" +
+                repeat("-", titleW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + codeW + "s | %-" + titleW + "s |%n";
 
         System.out.println(border);
         System.out.format(rowFormat, "ID", "Code", "Title");
         System.out.println(border);
-        System.out.format(rowFormat, course.getId(), course.getCourseCode(), course.getCourseTitle());
-        System.out.println(border);
-    }
-
-    public void displayCourses(List<Course> courses) {
-
-        if (courses.isEmpty()) {
-            System.out.println("No courses found.");
-            return;
-        }
-
-        System.out.println("\n===== COURSE LIST =====");
 
         for (Course course : courses) {
-            displayCourse(course);
+            System.out.format(rowFormat,
+                    course.getId(),
+                    course.getCourseCode(),
+                    course.getCourseTitle()
+            );
         }
+
+        System.out.println(border);
     }
 }
