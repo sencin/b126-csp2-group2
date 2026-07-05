@@ -101,6 +101,11 @@ public class ScheduleController {
 
         Schedule schedule = scheduleView.updateSchedule();
 
+        if (schedule == null) {
+            System.out.println("Update canceled.");
+            return;
+        }
+
         scheduleService.updateSchedule(schedule);
 
         System.out.println("Schedule updated successfully.");

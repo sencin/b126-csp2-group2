@@ -59,24 +59,33 @@ public class ScheduleView {
     }
 
     public Schedule updateSchedule() {
-
         System.out.println("\n===== UPDATE SCHEDULE =====");
 
-        System.out.print("Schedule ID: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        System.out.print("Schedule ID to update: ");
+        String idInput = scanner.nextLine().trim();
+        if (idInput.isEmpty()) {
+            System.out.println("Error: Schedule ID is required.");
+            return null;
+        }
+        int id = Integer.parseInt(idInput);
 
-        System.out.print("Course ID: ");
-        int courseId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Course ID (Press Enter to keep existing): ");
+        String courseInput = scanner.nextLine().trim();
+        int courseId = courseInput.isEmpty() ? 0 : Integer.parseInt(courseInput);
+
         int teacherId = UserSession.getCurrentUser().getId();
 
-        System.out.print("Date (yyyy-MM-dd): ");
-        LocalDate date = LocalDate.parse(scanner.nextLine());
+        System.out.print("Date (yyyy-MM-dd) (Press Enter to keep existing): ");
+        String dateInput = scanner.nextLine().trim();
+        LocalDate date = dateInput.isEmpty() ? null : LocalDate.parse(dateInput);
 
-        System.out.print("Start Time (HH:mm): ");
-        LocalTime startTime = LocalTime.parse(scanner.nextLine());
+        System.out.print("Start Time (HH:mm) (Press Enter to keep existing): ");
+        String startInput = scanner.nextLine().trim();
+        LocalTime startTime = startInput.isEmpty() ? null : LocalTime.parse(startInput);
 
-        System.out.print("End Time (HH:mm): ");
-        LocalTime endTime = LocalTime.parse(scanner.nextLine());
+        System.out.print("End Time (HH:mm) (Press Enter to keep existing): ");
+        String endInput = scanner.nextLine().trim();
+        LocalTime endTime = endInput.isEmpty() ? null : LocalTime.parse(endInput);
 
         return new Schedule(
                 id,
@@ -87,7 +96,6 @@ public class ScheduleView {
                 endTime
         );
     }
-
     public int readScheduleId() {
         System.out.print("Enter Schedule ID: ");
         return Integer.parseInt(scanner.nextLine());
