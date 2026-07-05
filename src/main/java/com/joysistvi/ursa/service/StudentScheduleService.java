@@ -1,37 +1,37 @@
 package com.joysistvi.ursa.service;
 
 import com.joysistvi.ursa.model.StudentSchedule;
-import com.joysistvi.ursa.repository.StudentScheduleRepository;
-import com.joysistvi.ursa.repository.impl.StudentScheduleRepositoryImpl;
+import com.joysistvi.ursa.repository.UserScheduleRepository;
+import com.joysistvi.ursa.repository.impl.UserScheduleRepositoryImpl;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class StudentScheduleService {
 
-    private final StudentScheduleRepository studentScheduleRepository;
+    private final UserScheduleRepository userScheduleRepository;
 
     public StudentScheduleService() {
-        this.studentScheduleRepository = new StudentScheduleRepositoryImpl();
+        this.userScheduleRepository = new UserScheduleRepositoryImpl();
     }
 
     public void addStudentSchedule(StudentSchedule studentSchedule) throws SQLException {
-        studentScheduleRepository.addStudentSchedule(studentSchedule);
+        userScheduleRepository.addStudentSchedule(studentSchedule);
     }
 
     public List<StudentSchedule> getStudentSchedulesByStudentId(int studentId) throws SQLException {
-        return studentScheduleRepository.getStudentSchedulesByStudentId(studentId);
+        return userScheduleRepository.getStudentSchedulesByStudentId(studentId);
     }
 
     public StudentSchedule getStudentScheduleById(int id) throws SQLException {
-        return studentScheduleRepository.getStudentScheduleById(id);
+        return userScheduleRepository.getStudentScheduleById(id);
     }
 
     public void updateStudentSchedule(StudentSchedule studentSchedule) throws SQLException {
-        studentScheduleRepository.updateStudentSchedule(studentSchedule);
+        userScheduleRepository.updateStudentSchedule(studentSchedule);
     }
 
     public void deleteStudentSchedule(int id) throws SQLException {
-        studentScheduleRepository.deleteStudentSchedule(id);
+        userScheduleRepository.deleteStudentSchedule(id);
     }
 }

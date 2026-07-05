@@ -1,6 +1,8 @@
 package com.joysistvi.ursa.controller;
 
+import com.joysistvi.ursa.model.Schedule;
 import com.joysistvi.ursa.model.StudentSchedule;
+import com.joysistvi.ursa.service.ScheduleService;
 import com.joysistvi.ursa.service.StudentScheduleService;
 import com.joysistvi.ursa.service.UserSession;
 import com.joysistvi.ursa.view.StudentScheduleView;
@@ -12,11 +14,13 @@ public class StudentScheduleController {
 
     private final StudentScheduleService studentScheduleService;
     private final StudentScheduleView studentScheduleView;
+    private  final ScheduleService scheduleService;
 
-    public StudentScheduleController(StudentScheduleService studentScheduleService,
-                                     StudentScheduleView studentScheduleView) {
+
+    public StudentScheduleController(StudentScheduleService studentScheduleService, StudentScheduleView studentScheduleView, ScheduleService scheduleService) {
         this.studentScheduleService = studentScheduleService;
         this.studentScheduleView = studentScheduleView;
+        this.scheduleService = scheduleService;
     }
 
     public void start() {
@@ -65,12 +69,9 @@ public class StudentScheduleController {
     }
 
     private void addStudentSchedule() throws SQLException {
-
-        StudentSchedule studentSchedule =
-                studentScheduleView.addNewStudentSchedule();
-
+        List<Schedule> schedules = scheduleService.getAllSchedules();
+        StudentSchedule studentSchedule = studentScheduleView.addNewStudentSchedule(schedules);
         studentScheduleService.addStudentSchedule(studentSchedule);
-
         System.out.println("Student schedule added successfully.");
     }
 

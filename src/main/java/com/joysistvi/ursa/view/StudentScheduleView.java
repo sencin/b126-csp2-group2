@@ -1,6 +1,8 @@
 package com.joysistvi.ursa.view;
 
+import com.joysistvi.ursa.model.Schedule;
 import com.joysistvi.ursa.model.StudentSchedule;
+import com.joysistvi.ursa.service.UserSession;
 
 import java.util.List;
 import java.util.Scanner;
@@ -10,6 +12,7 @@ import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 public class StudentScheduleView {
 
     private final Scanner scanner = new Scanner(System.in);
+    private  final ScheduleView scheduleView  = new ScheduleView();
 
     public int menu() {
         System.out.println("\n===== STUDENT SCHEDULES =====");
@@ -24,13 +27,11 @@ public class StudentScheduleView {
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public StudentSchedule addNewStudentSchedule() {
+    public StudentSchedule addNewStudentSchedule(List<Schedule> schedules) {
 
-        System.out.println("\n===== ADD STUDENT SCHEDULE =====");
-
-        System.out.print("Student ID: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
-
+        System.out.println("\n===== ADD SCHEDULE =====");
+        int studentId = UserSession.getCurrentUser().getId();
+        scheduleView.displaySchedules(schedules);
         System.out.print("Schedule ID: ");
         int scheduleId = Integer.parseInt(scanner.nextLine());
 
@@ -42,7 +43,7 @@ public class StudentScheduleView {
 
         return new StudentSchedule(
                 0,
-                studentId,
+                studentId, // Pass the session ID here
                 scheduleId,
                 academicYear,
                 semester

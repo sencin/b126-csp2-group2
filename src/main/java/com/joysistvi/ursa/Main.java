@@ -27,7 +27,9 @@ public class Main {
         GuardianController guardianController = new GuardianController(new GuardianService(), new GuardianView());
         StudentScheduleController studentScheduleController = new StudentScheduleController(
                 new StudentScheduleService(),
-                new StudentScheduleView());
+                new StudentScheduleView(),
+                new ScheduleService()
+        );
 
         AttendanceLogController attendanceLogController = new AttendanceLogController(
                 new AttendanceLogService(),

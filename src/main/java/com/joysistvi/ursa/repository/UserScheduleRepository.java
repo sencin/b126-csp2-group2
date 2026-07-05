@@ -5,7 +5,7 @@ import com.joysistvi.ursa.model.StudentSchedule;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface StudentScheduleRepository {
+public interface UserScheduleRepository {
 
     void addStudentSchedule(StudentSchedule studentSchedule) throws SQLException;
 
