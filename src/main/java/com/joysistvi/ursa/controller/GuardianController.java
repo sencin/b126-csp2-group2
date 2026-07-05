@@ -23,10 +23,9 @@ public class GuardianController {
         boolean running = true;
 
         while (running) {
-
-            int choice = guardianView.menu();
-
             try {
+
+                int choice = guardianView.menu();
                 switch (choice) {
                     case 1:
                         addGuardian();
