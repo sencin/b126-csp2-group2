@@ -43,6 +43,7 @@ public class UserService {
     }
 
     public void updateUser(User user) throws SQLException {
+
         if (user.getPassword() != null && !user.getPassword().trim().isEmpty()) {
             String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(hashedPassword);
