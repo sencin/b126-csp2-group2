@@ -24,9 +24,8 @@ public class CourseController {
 
         while (running) {
 
-            int choice = courseView.menu();
-
             try {
+                int choice = courseView.menu();
                 switch (choice) {
                     case 1:
                         addCourse();

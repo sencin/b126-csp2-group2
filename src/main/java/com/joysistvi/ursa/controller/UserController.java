@@ -22,10 +22,9 @@ public class UserController {
         boolean running = true;
 
         while (running) {
-
-            int choice = userView.menu();
-
             try {
+                int choice = userView.menu();
+
                 switch (choice) {
                     case 1:
                         addUser();

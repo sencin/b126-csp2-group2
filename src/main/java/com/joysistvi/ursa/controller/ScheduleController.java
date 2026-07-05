@@ -30,10 +30,8 @@ public class ScheduleController {
         boolean running = true;
 
         while (running) {
-
-            int choice = scheduleView.menu();
-
             try {
+                int choice = scheduleView.menu();
                 switch (choice) {
                     case 1:
                         addSchedule();

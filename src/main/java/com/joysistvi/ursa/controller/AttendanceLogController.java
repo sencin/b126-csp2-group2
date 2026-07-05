@@ -27,10 +27,8 @@ public class AttendanceLogController {
         boolean running = true;
 
         while (running) {
-
-            int choice = attendanceLogView.menu();
-
             try {
+                int choice = attendanceLogView.menu();
                 switch (choice) {
                     case 1:
                         addAttendanceLog();
