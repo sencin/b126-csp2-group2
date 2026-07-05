@@ -46,11 +46,54 @@ public class AttendanceLogView {
         int studentId = UserSession.getCurrentUser().getId();
 
         scheduleView.displaySchedules(schedules);
-        System.out.print("Schedule ID: ");
-        int scheduleId = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("Action (e.g., IN, OUT): ");
-        String action = scanner.nextLine();
+        int scheduleId = -1;
+        while (true) {
+            System.out.print("Select Schedule ID from the list above: ");
+            String scheduleInput = scanner.nextLine().trim();
+
+            if (scheduleInput.isEmpty()) {
+                System.out.println("Error: Schedule ID cannot be empty.");
+                continue;
+            }
+
+            try {
+                int parsedId = Integer.parseInt(scheduleInput);
+
+                boolean isValidSchedule = false;
+                for (Schedule s : schedules) {
+                    if (s.getId() == parsedId) {
+                        isValidSchedule = true;
+                        break;
+                    }
+                }
+
+                if (isValidSchedule) {
+                    scheduleId = parsedId;
+                    break; // Valid input! Exit loop.
+                } else {
+                    System.out.println("Error: That Schedule ID is not in your allowed list. Please choose a valid ID.");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Invalid number format. Please enter a numerical ID.");
+            }
+        }
+
+        // 2. Action field validation (Enforcing non-empty entries like IN/OUT)
+        String action = "";
+        while (true) {
+            System.out.print("Action (IN / OUT): ");
+            action = scanner.nextLine().trim().toUpperCase(); // Enforce uniform uppercase logging
+
+            if (action.isEmpty()) {
+                System.out.println("Error: Action is required.");
+            } else if (!action.equals("IN") && !action.equals("OUT")) {
+                System.out.println("Error: Action must be strictly 'IN' or 'OUT'.");
+            } else {
+                break; // Valid input! Exit loop.
+            }
+        }
 
         return new AttendanceLog(
                 0,
