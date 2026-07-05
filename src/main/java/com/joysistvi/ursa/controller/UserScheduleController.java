@@ -27,10 +27,9 @@ public class UserScheduleController {
         boolean running = true;
 
         while (running) {
-
-            int choice = userScheduleView.menu();
-
             try {
+                int choice = userScheduleView.menu();
+
                 switch (choice) {
                     case 1:
                         addStudentSchedule();
