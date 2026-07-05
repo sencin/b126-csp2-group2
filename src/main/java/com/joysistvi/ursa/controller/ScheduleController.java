@@ -2,6 +2,7 @@ package com.joysistvi.ursa.controller;
 
 import com.joysistvi.ursa.model.Course;
 import com.joysistvi.ursa.model.Schedule;
+import com.joysistvi.ursa.model.User;
 import com.joysistvi.ursa.service.CourseService;
 import com.joysistvi.ursa.service.ScheduleService;
 import com.joysistvi.ursa.service.UserService;
@@ -98,9 +99,11 @@ public class ScheduleController {
     }
 
     private void updateSchedule() throws SQLException {
+        int teacherId = UserSession.getCurrentUser().getId();
+        List<Schedule> existingSchedules = scheduleService.getSchedulesByTeacher(teacherId);
+        List<Course> courses = courseService.getAllCourses();
 
-        Schedule schedule = scheduleView.updateSchedule();
-
+        Schedule schedule = scheduleView.updateSchedule(existingSchedules,courses);
         if (schedule == null) {
             System.out.println("Update canceled.");
             return;

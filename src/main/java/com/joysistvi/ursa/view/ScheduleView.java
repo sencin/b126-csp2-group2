@@ -34,67 +34,161 @@ public class ScheduleView {
     public Schedule addNewSchedule(List<Course> courses) {
         System.out.println("\n===== Available Courses =====");
         courseView.displayCourses(courses);
-        System.out.print("Course ID: ");
-        int courseId = Integer.parseInt(scanner.nextLine());
 
+        int courseId = readValidCourseId(courses);
         int teacherId = UserSession.getCurrentUser().getId();
+        LocalDate date = readValidDate();
+        LocalTime startTime = readValidTime("Start Time (HH:mm): ");
+        LocalTime endTime = readValidEndTime(startTime);
 
-        System.out.print("Date (yyyy-MM-dd): ");
-        LocalDate date = LocalDate.parse(scanner.nextLine());
-
-        System.out.print("Start Time (HH:mm): ");
-        LocalTime startTime = LocalTime.parse(scanner.nextLine());
-
-        System.out.print("End Time (HH:mm): ");
-        LocalTime endTime = LocalTime.parse(scanner.nextLine());
-        // Only pass the IDs
-        return new Schedule(
-                0,
-                courseId,
-                teacherId,
-                date,
-                startTime,
-                endTime
-        );
+        return new Schedule(0, courseId, teacherId, date, startTime, endTime);
     }
 
-    public Schedule updateSchedule() {
-        System.out.println("\n===== UPDATE SCHEDULE =====");
-
-        System.out.print("Schedule ID to update: ");
-        String idInput = scanner.nextLine().trim();
-        if (idInput.isEmpty()) {
-            System.out.println("Error: Schedule ID is required.");
-            return null;
+    private int readValidCourseId(List<Course> courses) {
+        while (true) {
+            System.out.print("Course ID: ");
+            try {
+                int id = Integer.parseInt(scanner.nextLine().trim());
+                // Fast stream check to verify ID exists
+                if (courses.stream().anyMatch(c -> c.getId() == id)) return id;
+                System.out.println("Error: That Course ID does not exist in the list.");
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Please enter a valid number.");
+            }
         }
-        int id = Integer.parseInt(idInput);
+    }
 
-        System.out.print("Course ID (Press Enter to keep existing): ");
-        String courseInput = scanner.nextLine().trim();
-        int courseId = courseInput.isEmpty() ? 0 : Integer.parseInt(courseInput);
+    // Helper 2: Date Validation
+    private LocalDate readValidDate() {
+        while (true) {
+            System.out.print("Date (yyyy-MM-dd): ");
+            try {
+                return LocalDate.parse(scanner.nextLine().trim());
+            } catch (java.time.format.DateTimeParseException e) {
+                System.out.println("Error: Invalid date format. Use yyyy-MM-dd.");
+            }
+        }
+    }
 
+    // Helper 3: General Time Validation
+    private LocalTime readValidTime(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return LocalTime.parse(scanner.nextLine().trim());
+            } catch (java.time.format.DateTimeParseException e) {
+                System.out.println("Error: Invalid time format. Use HH:mm.");
+            }
+        }
+    }
+
+    private LocalTime readValidEndTime(LocalTime startTime) {
+        while (true) {
+            LocalTime endTime = readValidTime("End Time (HH:mm): ");
+            if (endTime.isAfter(startTime)) return endTime;
+            System.out.println("Error: End time must be strictly AFTER the start time.");
+        }
+    }
+
+    public Schedule updateSchedule(List<Schedule> existingSchedule, List<Course> courses) {
+        System.out.println("\n===== UPDATE SCHEDULE =====");
+        displaySchedules(existingSchedule);
+        int id = readMandatoryId();
+
+        if (id == -1) return null;
+
+        courseView.displayCourses(courses);
+        int courseId = readOptionalCourseId(courses);
         int teacherId = UserSession.getCurrentUser().getId();
 
-        System.out.print("Date (yyyy-MM-dd) (Press Enter to keep existing): ");
-        String dateInput = scanner.nextLine().trim();
-        LocalDate date = dateInput.isEmpty() ? null : LocalDate.parse(dateInput);
+        LocalDate date = readOptionalDate();
 
-        System.out.print("Start Time (HH:mm) (Press Enter to keep existing): ");
-        String startInput = scanner.nextLine().trim();
-        LocalTime startTime = startInput.isEmpty() ? null : LocalTime.parse(startInput);
+        // 4. Start & End Times (Optional)
+        LocalTime startTime = readOptionalStartTime();
+        LocalTime endTime = readOptionalEndTime(startTime);
 
-        System.out.print("End Time (HH:mm) (Press Enter to keep existing): ");
-        String endInput = scanner.nextLine().trim();
-        LocalTime endTime = endInput.isEmpty() ? null : LocalTime.parse(endInput);
+        return new Schedule(id, courseId, teacherId, date, startTime, endTime);
+    }
 
-        return new Schedule(
-                id,
-                courseId,
-                teacherId,
-                date,
-                startTime,
-                endTime
-        );
+// --- Adapting your helpers for Optional Inputs ---
+
+    private int readMandatoryId() {
+        while (true) {
+            System.out.print("Schedule ID to update: ");
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Error: Schedule ID is required.");
+                return -1;
+            }
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Please enter a valid number.");
+            }
+        }
+    }
+
+    private int readOptionalCourseId(List<Course> courses) {
+        while (true) {
+            System.out.print("Course ID (Press Enter to keep existing): ");
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) return 0;
+
+            try {
+                int id = Integer.parseInt(input);
+                if (courses.stream().anyMatch(c -> c.getId() == id)) return id;
+                System.out.println("Error: That Course ID does not exist in the list.");
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Please enter a valid number.");
+            }
+        }
+    }
+
+    private LocalDate readOptionalDate() {
+        while (true) {
+            System.out.print("Date (yyyy-MM-dd) (Press Enter to keep existing): ");
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) return null;
+
+            try {
+                return LocalDate.parse(input);
+            } catch (java.time.format.DateTimeParseException e) {
+                System.out.println("Error: Invalid date format. Use yyyy-MM-dd.");
+            }
+        }
+    }
+
+    private LocalTime readOptionalStartTime() {
+        while (true) {
+            System.out.print("Start Time (HH:mm) (Press Enter to keep existing): ");
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) return null;
+
+            try {
+                return LocalTime.parse(input);
+            } catch (java.time.format.DateTimeParseException e) {
+                System.out.println("Error: Invalid time format. Use HH:mm.");
+            }
+        }
+    }
+
+    private LocalTime readOptionalEndTime(LocalTime startTime) {
+        while (true) {
+            System.out.print("End Time (HH:mm) (Press Enter to keep existing): ");
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) return null;
+
+            try {
+                LocalTime endTime = LocalTime.parse(input);
+                if (startTime != null && !endTime.isAfter(startTime)) {
+                    System.out.println("Error: End time must be strictly AFTER the updated start time.");
+                    continue;
+                }
+                return endTime;
+            } catch (java.time.format.DateTimeParseException e) {
+                System.out.println("Error: Invalid time format. Use HH:mm.");
+            }
+        }
     }
     public int readScheduleId() {
         System.out.print("Enter Schedule ID: ");
@@ -116,7 +210,6 @@ public class ScheduleView {
         int startW = 8;
         int endW = 8;
 
-        // Added crsIdW layout spacer to the border string
         String border = "+" + repeat("-", idW + 2) + "+" +
                 repeat("-", crsIdW + 2) + "+" +
                 repeat("-", crsW + 2) + "+" +
@@ -137,7 +230,7 @@ public class ScheduleView {
         for (Schedule schedule : schedules) {
             System.out.format(rowFormat,
                     schedule.getId(),
-                    schedule.getCourseId(), // Injected Course ID logic
+                    schedule.getCourseId(),
                     schedule.getCourseTitle(),
                     schedule.getInstructorName(),
                     schedule.getDate(),
