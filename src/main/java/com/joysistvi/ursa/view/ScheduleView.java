@@ -2,6 +2,7 @@ package com.joysistvi.ursa.view;
 
 import com.joysistvi.ursa.model.Course;
 import com.joysistvi.ursa.model.Schedule;
+import com.joysistvi.ursa.service.UserSession;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,8 +38,7 @@ public class ScheduleView {
         System.out.print("Course ID: ");
         int courseId = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("Instructor Name: ");
-        String instructorName = scanner.nextLine();
+        int teacherId = UserSession.getCurrentUser().getId();
 
         System.out.print("Date (yyyy-MM-dd): ");
         LocalDate date = LocalDate.parse(scanner.nextLine());
@@ -48,11 +48,11 @@ public class ScheduleView {
 
         System.out.print("End Time (HH:mm): ");
         LocalTime endTime = LocalTime.parse(scanner.nextLine());
-
+        // Only pass the IDs
         return new Schedule(
                 0,
                 courseId,
-                instructorName,
+                teacherId,
                 date,
                 startTime,
                 endTime
@@ -68,9 +68,7 @@ public class ScheduleView {
 
         System.out.print("Course ID: ");
         int courseId = Integer.parseInt(scanner.nextLine());
-
-        System.out.print("Instructor Name: ");
-        String instructorName = scanner.nextLine();
+        int teacherId = UserSession.getCurrentUser().getId();
 
         System.out.print("Date (yyyy-MM-dd): ");
         LocalDate date = LocalDate.parse(scanner.nextLine());
@@ -84,7 +82,7 @@ public class ScheduleView {
         return new Schedule(
                 id,
                 courseId,
-                instructorName,
+                teacherId,
                 date,
                 startTime,
                 endTime
