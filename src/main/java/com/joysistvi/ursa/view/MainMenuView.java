@@ -26,4 +26,34 @@ public class MainMenuView {
             return -1;
         }
     }
+
+    public static int showStudentMenu() {
+        System.out.println("\n===== STUDENT MENU =====");
+        System.out.println("1. Courses");
+        System.out.println("2. Guardians");
+        System.out.println("3. My Schedule");
+        System.out.println("4. Attendance Logs");
+        System.out.println("0. Logout");
+        System.out.print("Choice: ");
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public static int showTeacherMenu() {
+        System.out.println("\n===== TEACHER MENU =====");
+        System.out.println("1. Schedules");
+        System.out.println("2. Attendance Logs");
+        System.out.println("0. Logout");
+        System.out.print("Choice: ");
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+
 }

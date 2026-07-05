@@ -33,7 +33,6 @@ public class LoginController {
                 System.out.println("Invalid email or password.");
                 return null;
             }
-
             UserSession.login(user);
 
             System.out.println("Welcome, " + user.getFirstName() + "!");

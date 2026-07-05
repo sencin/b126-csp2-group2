@@ -8,7 +8,7 @@ import com.joysistvi.ursa.view.*;
 
 import java.util.Scanner;
 
-import static com.joysistvi.ursa.view.MainMenuView.showMenu;
+import static com.joysistvi.ursa.view.MainMenuView.*;
 
 public class Main {
 
@@ -18,37 +18,24 @@ public class Main {
 
         UserController userController = new UserController(new UserService(), new UserView());
         CourseController courseController = new CourseController(new CourseService(), new CourseView());
-        ScheduleController scheduleController = new ScheduleController(
-                new ScheduleService(),
-                new ScheduleView(),
-                new UserService(),
-                new CourseService());
+        ScheduleController scheduleController = new ScheduleController(new ScheduleService(), new ScheduleView(), new UserService(), new CourseService());
 
         GuardianController guardianController = new GuardianController(new GuardianService(), new GuardianView());
-        UserScheduleController userScheduleController = new UserScheduleController(
-                new UserScheduleService(),
-                new UserScheduleView(),
-                new ScheduleService()
-        );
+        UserScheduleController userScheduleController = new UserScheduleController(new UserScheduleService(), new UserScheduleView(), new ScheduleService());
 
-        AttendanceLogController attendanceLogController = new AttendanceLogController(
-                new AttendanceLogService(),
-                new AttendanceLogView(),
-                new ScheduleService()
-        );
+        AttendanceLogController attendanceLogController = new AttendanceLogController(new AttendanceLogService(), new AttendanceLogView(), new ScheduleService());
 
-        LoginController loginController = new LoginController(
-                new LoginService(),
-                new LoginView());
-
-        Scanner scanner = new Scanner(System.in);
+        LoginController loginController = new LoginController(new LoginService(), new LoginView());
 
         while (true) {
             User currentUser = loginController.login();
+
             if (currentUser == null) {
                 System.out.println("Login failed.");
                 continue;
             }
+
+
             switch (currentUser.getRole().toUpperCase()) {
                 case "ADMIN":
                     boolean adminRunning = true;
@@ -86,12 +73,7 @@ public class Main {
                 case "TEACHER":
                     boolean teacherRunning = true;
                     while (teacherRunning) {
-                        System.out.println("\n===== TEACHER MENU =====");
-                        System.out.println("1. Schedules");
-                        System.out.println("2. Attendance Logs");
-                        System.out.println("0. Logout");
-                        System.out.print("Choice: ");
-                        int choice = Integer.parseInt(scanner.nextLine());
+                        int choice = showTeacherMenu();
                         switch (choice) {
                             case 1:
                                 scheduleController.start();
@@ -112,14 +94,7 @@ public class Main {
                 case "STUDENT":
                     boolean studentRunning = true;
                     while (studentRunning) {
-                        System.out.println("\n===== STUDENT MENU =====");
-                        System.out.println("1. Courses");
-                        System.out.println("2. Guardians");
-                        System.out.println("3. My Schedule");
-                        System.out.println("4. Attendance Logs");
-                        System.out.println("0. Logout");
-                        System.out.print("Choice: ");
-                        int choice = Integer.parseInt(scanner.nextLine());
+                        int choice = showStudentMenu();
                         switch (choice) {
                             case 1:
                                 courseController.start();

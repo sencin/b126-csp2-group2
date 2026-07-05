@@ -2,9 +2,6 @@ package com.joysistvi.ursa.view;
 
 import com.joysistvi.ursa.model.Login;
 import com.joysistvi.ursa.utils.ConsoleInput;
-
-import java.util.Scanner;
-
 public class LoginView {
 
     public Login login() {
@@ -14,19 +11,21 @@ public class LoginView {
         System.out.print("Choose an option: ");
 
         String choice = ConsoleInput.SCANNER.nextLine();
+        String email = "";
+        String password = "";
 
         if (choice.equals("2")) {
             System.out.println("Exiting login screen...");
             return null;
         }
-        System.out.println("\n===== ENTER CREDENTIALS =====");
 
-        System.out.print("Email: ");
-        String email = ConsoleInput.SCANNER.nextLine();
-
-        System.out.print("Password: ");
-        String password = ConsoleInput.SCANNER.nextLine();
-
+        if(choice.equals("1")){
+            System.out.println("\n===== ENTER CREDENTIALS =====");
+            System.out.print("Email: ");
+            email = ConsoleInput.SCANNER.nextLine();
+            System.out.print("Password: ");
+            password = ConsoleInput.SCANNER.nextLine();
+        }
         return new Login(email, password);
     }
 }
