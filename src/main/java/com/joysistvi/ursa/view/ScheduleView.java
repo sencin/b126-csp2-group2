@@ -93,7 +93,7 @@ public class ScheduleView {
     public Schedule updateSchedule(List<Schedule> existingSchedule, List<Course> courses) {
         System.out.println("\n===== UPDATE SCHEDULE =====");
         displaySchedules(existingSchedule);
-        int id = readMandatoryId();
+        int id = readMandatoryId(existingSchedule);
 
         if (id == -1) return null;
 
@@ -110,18 +110,20 @@ public class ScheduleView {
         return new Schedule(id, courseId, teacherId, date, startTime, endTime);
     }
 
-// --- Adapting your helpers for Optional Inputs ---
-
-    private int readMandatoryId() {
+    private int readMandatoryId(List<Schedule> schedules) {
         while (true) {
             System.out.print("Schedule ID to update: ");
             String input = scanner.nextLine().trim();
             if (input.isEmpty()) {
                 System.out.println("Error: Schedule ID is required.");
-                return -1;
+                continue;
             }
             try {
-                return Integer.parseInt(input);
+                int id = Integer.parseInt(input);
+                if (schedules.stream().anyMatch(s -> s.getId() == id)) {
+                    return id;
+                }
+                System.out.println("Error: That Schedule ID does not belong to you or does not exist.");
             } catch (NumberFormatException e) {
                 System.out.println("Error: Please enter a valid number.");
             }

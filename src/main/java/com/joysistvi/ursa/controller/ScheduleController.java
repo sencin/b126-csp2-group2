@@ -101,7 +101,7 @@ public class ScheduleController {
         List<Schedule> existingSchedules = scheduleService.getSchedulesByTeacher(teacherId);
         List<Course> courses = courseService.getAllCourses();
 
-        Schedule schedule = scheduleView.updateSchedule(existingSchedules,courses);
+        Schedule schedule = scheduleView.updateSchedule(existingSchedules, courses);
         if (schedule == null) {
             System.out.println("Update canceled.");
             return;
