@@ -95,7 +95,8 @@ public class AttendanceLogView {
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public int readScheduleId() {
+    public int readScheduleId(List<Schedule> schedules) {
+        scheduleView.displaySchedules(schedules);
         System.out.print("Enter Schedule ID: ");
         return Integer.parseInt(scanner.nextLine());
     }
@@ -126,16 +127,45 @@ public class AttendanceLogView {
     }
 
     public void displayAttendanceLogs(List<AttendanceLog> attendanceLogs) {
-
-        if (attendanceLogs.isEmpty()) {
+        if (attendanceLogs == null || attendanceLogs.isEmpty()) {
             System.out.println("No attendance logs found.");
             return;
         }
 
         System.out.println("\n===== ATTENDANCE LOG LIST =====");
 
-        for (AttendanceLog attendanceLog : attendanceLogs) {
-            displayAttendanceLog(attendanceLog);
+        // Adjusted widths to fit 6 columns
+        int idW = 4, studW = 15, courseW = 15, teacherW = 15, timeW = 16, actW = 8;
+
+        String border = "+" + repeat("-", idW + 2) + "+" + repeat("-", studW + 2) + "+" +
+                repeat("-", courseW + 2) + "+" + repeat("-", teacherW + 2) + "+" +
+                repeat("-", timeW + 2) + "+" + repeat("-", actW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + studW + "s | %-" + courseW + "s | %-" + teacherW + "s | %-" + timeW + "s | %-" + actW + "s |%n";
+
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Student", "Course", "Teacher", "Time", "Action");
+        System.out.println(border);
+
+        for (AttendanceLog log : attendanceLogs) {
+            String timeStr = (log.getTimestamp() != null) ? log.getTimestamp().toString().replace("T", " ").substring(0, 16) : "N/A";
+
+            System.out.format(rowFormat,
+                    log.getId(),
+                    truncate(log.getStudentName(), studW),
+                    truncate(log.getCourseTitle(), courseW),
+                    truncate(log.getTeacherName(), teacherW),
+                    timeStr,
+                    log.getAction()
+            );
         }
+        System.out.println(border);
+    }
+    private String truncate(String value, int length) {
+        if (value == null) return "";
+        if (value.length() > length) {
+            return value.substring(0, length - 3) + "...";
+        }
+        return value;
     }
 }

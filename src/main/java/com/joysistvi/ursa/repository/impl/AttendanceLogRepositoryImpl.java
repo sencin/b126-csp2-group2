@@ -27,12 +27,21 @@ public class AttendanceLogRepositoryImpl implements AttendanceLogRepository {
             stmt.executeUpdate();
         }
     }
-
     @Override
     public List<AttendanceLog> getAttendanceLogsByScheduleId(int scheduleId) throws SQLException {
         List<AttendanceLog> logs = new ArrayList<>();
 
-        String sql = "SELECT * FROM attendance_log WHERE schedule_id = ? ORDER BY timestamp DESC";
+        String sql =
+                "SELECT al.id, al.user_id, CONCAT(u.first_name, ' ', u.last_name) AS student_name, " +
+                        "       al.schedule_id, c.course_title, CONCAT(t.first_name, ' ', t.last_name) AS teacher_name, " +
+                        "       al.timestamp, al.action " +
+                        "FROM attendance_log al " +
+                        "INNER JOIN users u ON al.user_id = u.id " +
+                        "INNER JOIN schedules s ON al.schedule_id = s.id " +
+                        "INNER JOIN courses c ON s.courses_id = c.id " +
+                        "INNER JOIN users t ON s.teacher_id = t.id " +
+                        "WHERE al.schedule_id = ? " +
+                        "ORDER BY al.timestamp DESC";
 
         try (Connection conn = DbConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -41,10 +50,14 @@ public class AttendanceLogRepositoryImpl implements AttendanceLogRepository {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
+
                     logs.add(new AttendanceLog(
                             rs.getInt("id"),
                             rs.getInt("user_id"),
+                            rs.getString("student_name"),
                             rs.getInt("schedule_id"),
+                            rs.getString("course_title"),
+                            rs.getString("teacher_name"), // New field
                             rs.getTimestamp("timestamp").toLocalDateTime(),
                             rs.getString("action")
                     ));

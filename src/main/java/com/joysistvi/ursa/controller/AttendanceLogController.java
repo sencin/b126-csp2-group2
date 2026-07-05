@@ -77,11 +77,12 @@ public class AttendanceLogController {
     }
 
     private void viewAttendanceLogsBySchedule() throws SQLException {
+        int studentId = UserSession.getCurrentUser().getId();
+        List<Schedule> schedules = scheduleService.getEnrolledSchedulesByStudentId(studentId);
 
-        int scheduleId = attendanceLogView.readScheduleId();
+        int scheduleId = attendanceLogView.readScheduleId(schedules);
 
-        List<AttendanceLog> attendanceLogs =
-                attendanceLogService.getAttendanceLogsByScheduleId(scheduleId);
+        List<AttendanceLog> attendanceLogs = attendanceLogService.getAttendanceLogsByScheduleId(scheduleId);
 
         attendanceLogView.displayAttendanceLogs(attendanceLogs);
     }
