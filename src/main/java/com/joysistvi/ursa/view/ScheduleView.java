@@ -109,29 +109,35 @@ public class ScheduleView {
         }
 
         int idW = 5;
-        int crsW = 40;
+        int crsIdW = 9;
+        int crsW = 30;
         int instW = 20;
         int dateW = 12;
         int startW = 8;
         int endW = 8;
 
+        // Added crsIdW layout spacer to the border string
         String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", crsIdW + 2) + "+" +
                 repeat("-", crsW + 2) + "+" +
                 repeat("-", instW + 2) + "+" +
                 repeat("-", dateW + 2) + "+" +
                 repeat("-", startW + 2) + "+" +
                 repeat("-", endW + 2) + "+";
 
-        String rowFormat = "| %-" + idW + "s | %-" + crsW + "s | %-" + instW + "s | %-" + dateW + "s | %-" + startW + "s | %-" + endW + "s |%n";
+        // Inserted %-crsIdWs specifier into the row template formatting
+        String rowFormat = "| %-" + idW + "s | %-" + crsIdW + "s | %-" + crsW + "s | %-" + instW + "s | %-" + dateW + "s | %-" + startW + "s | %-" + endW + "s |%n";
 
         System.out.println("\n===== SCHEDULE LIST =====");
         System.out.println(border);
-        System.out.format(rowFormat, "ID", "Course", "Instructor", "Date", "Start", "End");
+        // Added headers matching the parameters mapping
+        System.out.format(rowFormat, "ID", "Course ID", "Course", "Instructor", "Date", "Start", "End");
         System.out.println(border);
 
         for (Schedule schedule : schedules) {
             System.out.format(rowFormat,
                     schedule.getId(),
+                    schedule.getCourseId(), // Injected Course ID logic
                     schedule.getCourseTitle(),
                     schedule.getInstructorName(),
                     schedule.getDate(),
