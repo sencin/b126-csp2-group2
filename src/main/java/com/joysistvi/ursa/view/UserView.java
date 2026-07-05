@@ -3,6 +3,7 @@ package com.joysistvi.ursa.view;
 import com.joysistvi.ursa.model.User;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -71,11 +72,18 @@ public class UserView {
     }
 
     public User updateUser() {
-
         System.out.println("\n===== UPDATE USER =====");
 
-        System.out.print("User ID: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = 0;
+        while (true) {
+            try {
+                System.out.print("User ID: ");
+                id = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid ID format. Please enter a number.");
+            }
+        }
 
         System.out.print("First Name: ");
         String firstName = scanner.nextLine();
@@ -101,8 +109,22 @@ public class UserView {
         System.out.print("Role: ");
         String role = scanner.nextLine().toUpperCase();
 
-        System.out.print("Date of Birth (yyyy-MM-dd): ");
-        LocalDate dateOfBirth = LocalDate.parse(scanner.nextLine());
+        LocalDate dateOfBirth = null;
+        while (true) {
+            System.out.print("Date of Birth (yyyy-MM-dd) [Leave blank if none]: ");
+            String dobInput = scanner.nextLine();
+
+            if (dobInput.trim().isEmpty()) {
+                break;
+            }
+
+            try {
+                dateOfBirth = LocalDate.parse(dobInput);
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Use yyyy-MM-dd.");
+            }
+        }
 
         return new User(
                 id,
@@ -117,7 +139,6 @@ public class UserView {
                 dateOfBirth
         );
     }
-
     public int readUserId() {
         System.out.print("Enter User ID: ");
         return Integer.parseInt(scanner.nextLine());

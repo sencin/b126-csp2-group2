@@ -43,6 +43,15 @@ public class UserService {
     }
 
     public void updateUser(User user) throws SQLException {
+        if (user.getPassword() != null && !user.getPassword().trim().isEmpty()) {
+            String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+            user.setPassword(hashedPassword);
+        } else {
+            User existingUser = userRepository.getUserById(user.getId());
+            if (existingUser != null) {
+                user.setPassword(existingUser.getPassword());
+            }
+        }
         userRepository.updateUser(user);
     }
 
