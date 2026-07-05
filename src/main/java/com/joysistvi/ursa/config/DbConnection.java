@@ -1,9 +1,6 @@
 package com.joysistvi.ursa.config;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DbConnection {
 
@@ -73,9 +70,9 @@ public class DbConnection {
                         ")"
         );
 
-        // Students
+        // Users
         stmt.execute(
-                "CREATE TABLE IF NOT EXISTS students (" +
+                "CREATE TABLE IF NOT EXISTS users (" +
                         "id INT AUTO_INCREMENT PRIMARY KEY, " +
                         "first_name VARCHAR(100) NOT NULL, " +
                         "last_name VARCHAR(100) NOT NULL, " +
@@ -84,7 +81,7 @@ public class DbConnection {
                         "password VARCHAR(255) NOT NULL, " +
                         "gender VARCHAR(20), " +
                         "account_status VARCHAR(50) DEFAULT 'Active', " +
-                        "year_level INT, " +
+                        "role VARCHAR(50) NOT NULL, " +
                         "date_of_birth DATE" +
                         ")"
         );
@@ -106,24 +103,24 @@ public class DbConnection {
         stmt.execute(
                 "CREATE TABLE IF NOT EXISTS guardians (" +
                         "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                        "student_id INT NOT NULL, " +
+                        "user_id INT NOT NULL, " +
                         "first_name VARCHAR(100) NOT NULL, " +
                         "last_name VARCHAR(100) NOT NULL, " +
                         "relationship VARCHAR(50) NOT NULL, " +
                         "phone_number VARCHAR(20), " +
-                        "FOREIGN KEY (student_id) REFERENCES students(id)" +
+                        "FOREIGN KEY (user_id) REFERENCES users(id)" +
                         ")"
         );
 
-        // Students Schedules
+        // Users Schedules
         stmt.execute(
-                "CREATE TABLE IF NOT EXISTS students_schedules (" +
+                "CREATE TABLE IF NOT EXISTS users_schedules (" +
                         "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                        "student_id INT NOT NULL, " +
+                        "user_id INT NOT NULL, " +
                         "schedules_id INT NOT NULL, " +
                         "academic_year VARCHAR(20) NOT NULL, " +
                         "semester VARCHAR(50) NOT NULL, " +
-                        "FOREIGN KEY (student_id) REFERENCES students(id), " +
+                        "FOREIGN KEY (user_id) REFERENCES users(id), " +
                         "FOREIGN KEY (schedules_id) REFERENCES schedules(id)" +
                         ")"
         );
@@ -132,14 +129,39 @@ public class DbConnection {
         stmt.execute(
                 "CREATE TABLE IF NOT EXISTS attendance_log (" +
                         "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                        "student_id INT NOT NULL, " +
+                        "user_id INT NOT NULL, " +
                         "schedule_id INT NOT NULL, " +
                         "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, " +
                         "action VARCHAR(50) NOT NULL, " +
-                        "FOREIGN KEY (student_id) REFERENCES students(id), " +
+                        "FOREIGN KEY (user_id) REFERENCES users(id), " +
                         "FOREIGN KEY (schedule_id) REFERENCES schedules(id)" +
                         ")"
         );
+
+        String sql =
+                "INSERT INTO users " +
+                        "(first_name, last_name, middle_name, email, password, gender, account_status, role, date_of_birth) " +
+                        "SELECT ?, ?, ?, ?, SHA2(?, 256), ?, ?, ?, ? " +
+                        "WHERE NOT EXISTS (" +
+                        "SELECT 1 FROM users WHERE email = ?" +
+                        ")";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "System");
+            ps.setString(2, "Administrator");
+            ps.setString(3, "");
+            ps.setString(4, "admin");
+            ps.setString(5, "admin");
+            ps.setString(6, "");
+            ps.setString(7, "ACTIVE");
+            ps.setString(8, "ADMIN");
+            ps.setNull(9, Types.DATE);
+            ps.setString(10, "admin");
+
+            ps.executeUpdate();
+        }
+
 
         stmt.close();
 
