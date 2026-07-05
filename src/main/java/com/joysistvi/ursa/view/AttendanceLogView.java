@@ -3,6 +3,7 @@ package com.joysistvi.ursa.view;
 import com.joysistvi.ursa.model.AttendanceLog;
 import com.joysistvi.ursa.model.Schedule;
 import com.joysistvi.ursa.service.UserSession;
+import com.joysistvi.ursa.utils.ConsoleInput;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -137,10 +138,20 @@ public class AttendanceLogView {
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public int readScheduleId(List<Schedule> schedules) {
+    public int readValidScheduleId(List<Schedule> schedules) {
         scheduleView.displaySchedules(schedules);
-        System.out.print("Enter Schedule ID: ");
-        return Integer.parseInt(scanner.nextLine());
+        while (true) {
+            System.out.print("Enter Schedule ID: ");
+            try {
+                int id = Integer.parseInt(ConsoleInput.SCANNER.nextLine().trim());
+                if (schedules.stream().anyMatch(s -> s.getId() == id)) {
+                    return id;
+                }
+                System.out.println("Error: That Schedule ID does not exist in your available schedules.");
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Please enter a valid numeric ID.");
+            }
+        }
     }
 
     public void displayAttendanceLog(AttendanceLog attendanceLog) {

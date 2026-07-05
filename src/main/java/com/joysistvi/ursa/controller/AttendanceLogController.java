@@ -6,6 +6,7 @@ import com.joysistvi.ursa.model.User;
 import com.joysistvi.ursa.service.AttendanceLogService;
 import com.joysistvi.ursa.service.ScheduleService;
 import com.joysistvi.ursa.service.UserSession;
+import com.joysistvi.ursa.utils.ConsoleInput;
 import com.joysistvi.ursa.view.AttendanceLogView;
 
 import java.sql.SQLException;
@@ -99,7 +100,7 @@ public class AttendanceLogController {
             return;
         }
 
-        int scheduleId = attendanceLogView.readScheduleId(schedules);
+        int scheduleId = attendanceLogView.readValidScheduleId(schedules);
         List<AttendanceLog> attendanceLogs = attendanceLogService.getAttendanceLogsByScheduleId(scheduleId);
         attendanceLogView.displayAttendanceLogs(attendanceLogs);
     }

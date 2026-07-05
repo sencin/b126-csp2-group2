@@ -202,7 +202,7 @@ public class ScheduleView {
             return;
         }
 
-        int idW = 5;
+        int idW = 13;
         int crsIdW = 9;
         int crsW = 30;
         int instW = 20;
@@ -224,7 +224,7 @@ public class ScheduleView {
         System.out.println("\n===== SCHEDULE LIST =====");
         System.out.println(border);
         // Added headers matching the parameters mapping
-        System.out.format(rowFormat, "ID", "Course ID", "Course", "Instructor", "Date", "Start", "End");
+        System.out.format(rowFormat, "Schedule ID", "Course ID", "Course", "Instructor", "Date", "Start", "End");
         System.out.println(border);
 
         for (Schedule schedule : schedules) {
