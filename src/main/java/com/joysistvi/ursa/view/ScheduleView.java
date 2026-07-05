@@ -32,8 +32,7 @@ public class ScheduleView {
     }
 
     public Schedule addNewSchedule(List<Course> courses) {
-
-        System.out.println("\n===== ADD SCHEDULE =====");
+        System.out.println("\n===== Available Schedules =====");
         courseView.displayCourses(courses);
         System.out.print("Course ID: ");
         int courseId = Integer.parseInt(scanner.nextLine());
