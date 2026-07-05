@@ -97,14 +97,21 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void updateUser(User user) throws SQLException {
-
-        String sql = "UPDATE users SET first_name = ?, last_name = ?, middle_name = ?, " +
-                "email = ?, gender = ?, account_status = ?, role = ?, " +
-                "date_of_birth = ? WHERE id = ?";
+        String sql = "UPDATE users SET " +
+                "first_name = COALESCE(NULLIF(?, ''), first_name), " +
+                "last_name = COALESCE(NULLIF(?, ''), last_name), " +
+                "middle_name = COALESCE(NULLIF(?, ''), middle_name), " +
+                "email = COALESCE(NULLIF(?, ''), email), " +
+                "gender = COALESCE(NULLIF(?, ''), gender), " +
+                "account_status = COALESCE(NULLIF(?, ''), account_status), " +
+                "role = COALESCE(NULLIF(?, ''), role), " +
+                "date_of_birth = COALESCE(?, date_of_birth) " +
+                "WHERE id = ?";
 
         try (Connection conn = DbConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            // NULLIF(?, '') converts empty strings to NULL, allowing COALESCE to skip them
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());
             stmt.setString(3, user.getMiddleName());
@@ -112,17 +119,23 @@ public class UserRepositoryImpl implements UserRepository {
             stmt.setString(5, user.getGender());
             stmt.setString(6, user.getAccountStatus());
             stmt.setString(7, user.getRole());
-            stmt.setDate(8, Date.valueOf(user.getDateOfBirth()));
+
+            // Date handling
+            if (user.getDateOfBirth() != null) {
+                stmt.setDate(8, Date.valueOf(user.getDateOfBirth()));
+            } else {
+                stmt.setNull(8, java.sql.Types.DATE);
+            }
+
             stmt.setInt(9, user.getId());
 
             stmt.executeUpdate();
         }
     }
-
     @Override
     public void deleteUser(int id) throws SQLException {
-
-        String sql = "DELETE FROM users WHERE id = ?";
+        // Soft delete: Update the status instead of removing the row
+        String sql = "UPDATE users SET account_status = 'Archived' WHERE id = ?";
 
         try (Connection conn = DbConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
