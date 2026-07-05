@@ -97,27 +97,53 @@ public class ScheduleController {
     }
 
     private void updateSchedule() throws SQLException {
-        int teacherId = UserSession.getCurrentUser().getId();
-        List<Schedule> existingSchedules = scheduleService.getSchedulesByTeacher(teacherId);
-        List<Course> courses = courseService.getAllCourses();
+        User currentUser = UserSession.getCurrentUser();
+        boolean isAdmin = "admin".equalsIgnoreCase(currentUser.getRole());
 
+        List<Schedule> existingSchedules;
+
+        if (isAdmin) {
+            existingSchedules = scheduleService.getAllSchedules();
+        } else {
+            existingSchedules = scheduleService.getSchedulesByTeacher(currentUser.getId());
+        }
+
+        List<Course> courses = courseService.getAllCourses();
         Schedule schedule = scheduleView.updateSchedule(existingSchedules, courses);
+
         if (schedule == null) {
             System.out.println("Update canceled.");
             return;
         }
 
-        scheduleService.updateSchedule(schedule);
+        boolean isUpdated = scheduleService.updateSchedule(schedule);
 
-        System.out.println("Schedule updated successfully.");
+        if (isUpdated) {
+            System.out.println("Schedule updated successfully.");
+        }
     }
 
     private void deleteSchedule() throws SQLException {
+        User currentUser = UserSession.getCurrentUser();
+        boolean isAdmin = "admin".equalsIgnoreCase(currentUser.getRole());
+        List<Schedule> schedules;
+        if (isAdmin) {
+            schedules = scheduleService.getAllSchedules();
+        } else {
+            schedules = scheduleService.getSchedulesByTeacher(currentUser.getId());
+        }
 
-        int id = scheduleView.readScheduleId();
+        if (schedules == null || schedules.isEmpty()) {
+            System.out.println("No schedules available to delete.");
+            return;
+        }
+        scheduleView.displaySchedules(schedules);
+        int id = scheduleView.readValidScheduleId(schedules);
 
-        scheduleService.deleteSchedule(id);
+        boolean isDeleted = scheduleService.deleteSchedule(id);
 
-        System.out.println("Schedule deleted successfully.");
+        if (isDeleted) {
+            System.out.println("Schedule deleted successfully.");
+        }
     }
 }

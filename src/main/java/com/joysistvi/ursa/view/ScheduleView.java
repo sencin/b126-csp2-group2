@@ -44,12 +44,11 @@ public class ScheduleView {
         return new Schedule(0, courseId, teacherId, date, startTime, endTime);
     }
 
-    private int readValidCourseId(List<Course> courses) {
+    public int readValidCourseId(List<Course> courses) {
         while (true) {
             System.out.print("Course ID: ");
             try {
                 int id = Integer.parseInt(scanner.nextLine().trim());
-                // Fast stream check to verify ID exists
                 if (courses.stream().anyMatch(c -> c.getId() == id)) return id;
                 System.out.println("Error: That Course ID does not exist in the list.");
             } catch (NumberFormatException e) {
@@ -192,9 +191,20 @@ public class ScheduleView {
             }
         }
     }
-    public int readScheduleId() {
-        System.out.print("Enter Schedule ID: ");
-        return Integer.parseInt(scanner.nextLine());
+
+    public int readValidScheduleId(List<Schedule> schedules) {
+        while (true) {
+            System.out.print("Enter Schedule ID to delete: ");
+            try {
+                int id = Integer.parseInt(scanner.nextLine().trim());
+                if (schedules.stream().anyMatch(s -> s.getId() == id)) {
+                    return id;
+                }
+                System.out.println("Error: That Schedule ID does not exist in your list. Please try again.");
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Please enter a valid number.");
+            }
+        }
     }
 
     public void displaySchedules(List<Schedule> schedules) {
