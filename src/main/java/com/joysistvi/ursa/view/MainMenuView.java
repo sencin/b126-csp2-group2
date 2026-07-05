@@ -16,7 +16,7 @@ public class MainMenuView {
         System.out.println("| 4. Guardians             |");
         System.out.println("| 5. Student Schedules     |");
         System.out.println("| 6. Attendance Logs       |");
-        System.out.println("| 0. Exit                  |");
+        System.out.println("| 0. Logout                |");
         System.out.println("+--------------------------+");
         System.out.print("Select option: ");
 
