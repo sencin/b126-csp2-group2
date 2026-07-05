@@ -17,7 +17,6 @@ public class UserService {
     }
 
     public void addUser(User user) throws SQLException {
-
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 
         User hashedUser = new User(
@@ -32,10 +31,9 @@ public class UserService {
                 user.getRole(),
                 user.getDateOfBirth()
         );
-        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+
         userRepository.addUser(hashedUser);
     }
-
     public List<User> getAllUsers() throws SQLException {
         return userRepository.getAllUsers();
     }

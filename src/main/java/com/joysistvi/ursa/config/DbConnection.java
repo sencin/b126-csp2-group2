@@ -1,5 +1,7 @@
 package com.joysistvi.ursa.config;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.*;
 
 public class DbConnection {
@@ -141,7 +143,7 @@ public class DbConnection {
         String sql =
                 "INSERT INTO users " +
                         "(first_name, last_name, middle_name, email, password, gender, account_status, role, date_of_birth) " +
-                        "SELECT ?, ?, ?, ?, SHA2(?, 256), ?, ?, ?, ? " +
+                        "SELECT ?, ?, ?, ?, ?, ?, ?, ?, ? " +
                         "WHERE NOT EXISTS (" +
                         "SELECT 1 FROM users WHERE email = ?" +
                         ")";
@@ -152,11 +154,12 @@ public class DbConnection {
             ps.setString(2, "Administrator");
             ps.setString(3, "");
             ps.setString(4, "admin");
-            ps.setString(5, "admin");
+            String hashedAdminPassword = BCrypt.hashpw("admin", BCrypt.gensalt());
+            ps.setString(5, hashedAdminPassword);
             ps.setString(6, "");
             ps.setString(7, "ACTIVE");
             ps.setString(8, "ADMIN");
-            ps.setNull(9, Types.DATE);
+            ps.setString(9, "2002-02-20");
             ps.setString(10, "admin");
 
             ps.executeUpdate();
