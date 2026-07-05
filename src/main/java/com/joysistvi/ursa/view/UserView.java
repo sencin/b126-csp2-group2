@@ -1,6 +1,6 @@
 package com.joysistvi.ursa.view;
 
-import com.joysistvi.ursa.model.Student;
+import com.joysistvi.ursa.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,12 +8,12 @@ import java.util.Scanner;
 
 import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 
-public class StudentView {
+public class UserView {
 
     private final Scanner scanner = new Scanner(System.in);
 
     public int menu() {
-        System.out.println("\n===== STUDENTS =====");
+        System.out.println("\n===== USERS =====");
         System.out.println("1. Add");
         System.out.println("2. View All");
         System.out.println("3. View By ID");
@@ -25,9 +25,9 @@ public class StudentView {
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public Student addNewStudent() {
+    public User addNewUser() {
 
-        System.out.println("\n===== ADD STUDENT =====");
+        System.out.println("\n===== ADD USER =====");
 
         System.out.print("First Name: ");
         String firstName = scanner.nextLine();
@@ -50,13 +50,13 @@ public class StudentView {
         System.out.print("Account Status: ");
         String accountStatus = scanner.nextLine();
 
-        System.out.print("Year Level: ");
-        int yearLevel = Integer.parseInt(scanner.nextLine());
+        System.out.print("Role: ");
+        String role = scanner.nextLine().toUpperCase();
 
         System.out.print("Date of Birth (yyyy-MM-dd): ");
         LocalDate dateOfBirth = LocalDate.parse(scanner.nextLine());
 
-        return new Student(
+        return new User(
                 0,
                 firstName,
                 lastName,
@@ -65,16 +65,16 @@ public class StudentView {
                 password,
                 gender,
                 accountStatus,
-                yearLevel,
+                role,
                 dateOfBirth
         );
     }
 
-    public Student updateStudent() {
+    public User updateUser() {
 
-        System.out.println("\n===== UPDATE STUDENT =====");
+        System.out.println("\n===== UPDATE USER =====");
 
-        System.out.print("Student ID: ");
+        System.out.print("User ID: ");
         int id = Integer.parseInt(scanner.nextLine());
 
         System.out.print("First Name: ");
@@ -98,13 +98,13 @@ public class StudentView {
         System.out.print("Account Status: ");
         String accountStatus = scanner.nextLine();
 
-        System.out.print("Year Level: ");
-        int yearLevel = Integer.parseInt(scanner.nextLine());
+        System.out.print("Role: ");
+        String role = scanner.nextLine().toUpperCase();
 
         System.out.print("Date of Birth (yyyy-MM-dd): ");
         LocalDate dateOfBirth = LocalDate.parse(scanner.nextLine());
 
-        return new Student(
+        return new User(
                 id,
                 firstName,
                 lastName,
@@ -113,18 +113,32 @@ public class StudentView {
                 password,
                 gender,
                 accountStatus,
-                yearLevel,
+                role,
                 dateOfBirth
         );
     }
 
-    public int readStudentId() {
-        System.out.print("Enter Student ID: ");
+    public int readUserId() {
+        System.out.print("Enter User ID: ");
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public void displayStudents(List<Student> students) {
-        int idW = 5, fnW = 12, lnW = 12, mnW = 10, emW = 20, genW = 6, statW = 10, yrW = 5, dobW = 10;
+    public void displayUsers(List<User> users) {
+
+        if (users == null || users.isEmpty()) {
+            System.out.println("No users found.");
+            return;
+        }
+
+        int idW = 5;
+        int fnW = 12;
+        int lnW = 12;
+        int mnW = 10;
+        int emW = 25;
+        int genW = 8;
+        int statW = 10;
+        int roleW = 10;
+        int dobW = 12;
 
         String border = "+" + repeat("-", idW + 2) + "+" +
                 repeat("-", fnW + 2) + "+" +
@@ -133,27 +147,38 @@ public class StudentView {
                 repeat("-", emW + 2) + "+" +
                 repeat("-", genW + 2) + "+" +
                 repeat("-", statW + 2) + "+" +
-                repeat("-", yrW + 2) + "+" +
+                repeat("-", roleW + 2) + "+" +
                 repeat("-", dobW + 2) + "+";
 
-        String rowFormat = "| %-" + idW + "s | %-" + fnW + "s | %-" + lnW + "s | %-" + mnW + "s | %-" + emW + "s | %-" + genW + "s | %-" + statW + "s | %-" + yrW + "s | %-" + dobW + "s |%n";
+        String rowFormat = "| %-" + idW + "s | %-" + fnW + "s | %-" + lnW + "s | %-" + mnW + "s | %-" + emW + "s | %-" + genW + "s | %-" + statW + "s | %-" + roleW + "s | %-" + dobW + "s |%n";
 
         System.out.println(border);
-        System.out.format(rowFormat, "ID", "First", "Last", "Middle", "Email", "Gender", "Status", "Year", "Birth Date");
+        System.out.format(rowFormat,
+                "ID",
+                "First",
+                "Last",
+                "Middle",
+                "Email",
+                "Gender",
+                "Status",
+                "Role",
+                "Birth Date");
         System.out.println(border);
-        for (Student student : students) {
+
+        for (User user : users) {
             System.out.format(rowFormat,
-                    student.getId(),
-                    student.getFirstName(),
-                    student.getLastName(),
-                    student.getMiddleName(),
-                    student.getEmail(),
-                    student.getGender(),
-                    student.getAccountStatus(),
-                    student.getYearLevel(),
-                    student.getDateOfBirth()
+                    user.getId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getMiddleName(),
+                    user.getEmail(),
+                    user.getGender(),
+                    user.getAccountStatus(),
+                    user.getRole(),
+                    user.getDateOfBirth()
             );
         }
+
         System.out.println(border);
     }
 }

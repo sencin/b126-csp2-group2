@@ -2,10 +2,9 @@ package com.joysistvi.ursa.controller;
 
 import com.joysistvi.ursa.model.Course;
 import com.joysistvi.ursa.model.Schedule;
-import com.joysistvi.ursa.model.Student;
 import com.joysistvi.ursa.service.CourseService;
 import com.joysistvi.ursa.service.ScheduleService;
-import com.joysistvi.ursa.service.StudentService;
+import com.joysistvi.ursa.service.UserService;
 import com.joysistvi.ursa.view.ScheduleView;
 
 import java.sql.SQLException;
@@ -14,14 +13,14 @@ import java.util.List;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
-    private final StudentService studentService;
+    private final UserService userService;
     private final ScheduleView scheduleView;
     private  final CourseService courseService;
 
-    public ScheduleController(ScheduleService scheduleService, ScheduleView scheduleView, StudentService studentService, CourseService courseService) {
+    public ScheduleController(ScheduleService scheduleService, ScheduleView scheduleView, UserService userService, CourseService courseService) {
         this.scheduleService = scheduleService;
         this.scheduleView = scheduleView;
-        this.studentService = studentService;
+        this.userService = userService;
         this.courseService = courseService;
     }
 

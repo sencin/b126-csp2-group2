@@ -10,7 +10,7 @@ public class MainMenuView {
         System.out.println("\n+--------------------------+");
         System.out.println("|          URSA            |");
         System.out.println("+--------------------------+");
-        System.out.println("| 1. Students              |");
+        System.out.println("| 1. Users                 |");
         System.out.println("| 2. Courses               |");
         System.out.println("| 3. Schedules             |");
         System.out.println("| 4. Guardians             |");

@@ -2,8 +2,6 @@ package com.joysistvi.ursa.view;
 
 import com.joysistvi.ursa.model.Course;
 import com.joysistvi.ursa.model.Schedule;
-import com.joysistvi.ursa.model.Student;
-import com.joysistvi.ursa.utils.ConsoleTableUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,7 +13,7 @@ import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 public class ScheduleView {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final StudentView studentView = new StudentView();
+    private final UserView userView = new UserView();
     private final CourseView courseView = new CourseView();
 
 
