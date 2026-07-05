@@ -71,6 +71,47 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
+    public List<Schedule> getEnrolledSchedulesByStudentId(int studentId) throws SQLException {
+        List<Schedule> schedules = new ArrayList<>();
+
+        // Join with users_schedules to filter by the specific student
+        String sql =
+                "SELECT s.id, s.courses_id, c.course_title, " +
+                        "s.teacher_id, CONCAT(u.first_name, ' ', u.last_name) AS instructor_name, " +
+                        "s.date, s.start_time, s.end_time " +
+                        "FROM schedules s " +
+                        "INNER JOIN courses c ON s.courses_id = c.id " +
+                        "INNER JOIN users u ON s.teacher_id = u.id " +
+                        "INNER JOIN users_schedules us ON s.id = us.schedules_id " +
+                        "WHERE us.user_id = ? " +
+                        "ORDER BY s.date ASC, s.start_time ASC";
+
+        try (Connection conn = DbConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    schedules.add(new Schedule(
+                            rs.getInt("id"),
+                            rs.getInt("courses_id"),
+                            rs.getString("course_title"),
+                            rs.getInt("teacher_id"),
+                            rs.getString("instructor_name"),
+                            rs.getDate("date").toLocalDate(),
+                            rs.getTime("start_time").toLocalTime(),
+                            rs.getTime("end_time").toLocalTime()
+                    ));
+                }
+            }
+        }
+
+        return schedules;
+    }
+
+
+    @Override
     public Schedule getScheduleById(int id) throws SQLException {
         // Updated to include JOINs so we have course_title and instructor_name for the model
         String sql =

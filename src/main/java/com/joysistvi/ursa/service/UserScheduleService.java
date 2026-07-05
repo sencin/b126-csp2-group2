@@ -7,11 +7,11 @@ import com.joysistvi.ursa.repository.impl.UserScheduleRepositoryImpl;
 import java.sql.SQLException;
 import java.util.List;
 
-public class StudentScheduleService {
+public class UserScheduleService {
 
     private final UserScheduleRepository userScheduleRepository;
 
-    public StudentScheduleService() {
+    public UserScheduleService() {
         this.userScheduleRepository = new UserScheduleRepositoryImpl();
     }
 

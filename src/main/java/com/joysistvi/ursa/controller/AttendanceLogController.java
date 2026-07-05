@@ -1,7 +1,9 @@
 package com.joysistvi.ursa.controller;
 
 import com.joysistvi.ursa.model.AttendanceLog;
+import com.joysistvi.ursa.model.Schedule;
 import com.joysistvi.ursa.service.AttendanceLogService;
+import com.joysistvi.ursa.service.ScheduleService;
 import com.joysistvi.ursa.service.UserSession;
 import com.joysistvi.ursa.view.AttendanceLogView;
 
@@ -12,11 +14,12 @@ public class AttendanceLogController {
 
     private final AttendanceLogService attendanceLogService;
     private final AttendanceLogView attendanceLogView;
+    private  final ScheduleService scheduleService;
 
-    public AttendanceLogController(AttendanceLogService attendanceLogService,
-                                   AttendanceLogView attendanceLogView) {
+    public AttendanceLogController(AttendanceLogService attendanceLogService, AttendanceLogView attendanceLogView, ScheduleService scheduleService) {
         this.attendanceLogService = attendanceLogService;
         this.attendanceLogView = attendanceLogView;
+        this.scheduleService = scheduleService;
     }
 
     public void start() {
@@ -65,9 +68,9 @@ public class AttendanceLogController {
     }
 
     private void addAttendanceLog() throws SQLException {
-
-        AttendanceLog attendanceLog = attendanceLogView.addNewAttendanceLog();
-
+        int studentId = UserSession.getCurrentUser().getId();
+        List<Schedule> schedules = scheduleService.getEnrolledSchedulesByStudentId(studentId);
+        AttendanceLog attendanceLog = attendanceLogView.addNewAttendanceLog(schedules);
         attendanceLogService.addAttendanceLog(attendanceLog);
 
         System.out.println("Attendance log added successfully.");

@@ -15,7 +15,7 @@ public class AttendanceLogRepositoryImpl implements AttendanceLogRepository {
 
     @Override
     public void addAttendanceLog(AttendanceLog attendanceLog) throws SQLException {
-        String sql = "INSERT INTO attendance_log (student_id, schedule_id, action) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO attendance_log (user_id, schedule_id, action) VALUES (?, ?, ?)";
 
         try (Connection conn = DbConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -43,7 +43,7 @@ public class AttendanceLogRepositoryImpl implements AttendanceLogRepository {
                 while (rs.next()) {
                     logs.add(new AttendanceLog(
                             rs.getInt("id"),
-                            rs.getInt("student_id"),
+                            rs.getInt("user_id"),
                             rs.getInt("schedule_id"),
                             rs.getTimestamp("timestamp").toLocalDateTime(),
                             rs.getString("action")
@@ -54,9 +54,9 @@ public class AttendanceLogRepositoryImpl implements AttendanceLogRepository {
 
         return logs;
     }
-
     @Override
     public AttendanceLog getAttendanceLogById(int id) throws SQLException {
+        // Table: attendance_log
         String sql = "SELECT * FROM attendance_log WHERE id = ?";
 
         try (Connection conn = DbConnection.getInstance().getConnection();
@@ -68,8 +68,8 @@ public class AttendanceLogRepositoryImpl implements AttendanceLogRepository {
                 if (rs.next()) {
                     return new AttendanceLog(
                             rs.getInt("id"),
-                            rs.getInt("student_id"),
-                            rs.getInt("schedule_id"),
+                            rs.getInt("user_id"), // Matches database column
+                            rs.getInt("schedule_id"), // Matches database column
                             rs.getTimestamp("timestamp").toLocalDateTime(),
                             rs.getString("action")
                     );
@@ -82,7 +82,7 @@ public class AttendanceLogRepositoryImpl implements AttendanceLogRepository {
 
     @Override
     public void updateAttendanceLog(AttendanceLog attendanceLog) throws SQLException {
-        String sql = "UPDATE attendance_log SET student_id = ?, schedule_id = ?, action = ? WHERE id = ?";
+        String sql = "UPDATE attendance_log SET user_id = ?, schedule_id = ?, action = ? WHERE id = ?";
 
         try (Connection conn = DbConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -95,9 +95,9 @@ public class AttendanceLogRepositoryImpl implements AttendanceLogRepository {
             stmt.executeUpdate();
         }
     }
-
     @Override
     public void deleteAttendanceLog(int id) throws SQLException {
+        // Table: attendance_log
         String sql = "DELETE FROM attendance_log WHERE id = ?";
 
         try (Connection conn = DbConnection.getInstance().getConnection();

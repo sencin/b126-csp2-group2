@@ -9,24 +9,34 @@ import java.util.Scanner;
 
 import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 
-public class StudentScheduleView {
+public class UserScheduleView {
 
     private final Scanner scanner = new Scanner(System.in);
     private  final ScheduleView scheduleView  = new ScheduleView();
 
     public int menu() {
         System.out.println("\n===== STUDENT SCHEDULES =====");
-        System.out.println("1. Add");
-        System.out.println("2. View By Student");
-        System.out.println("3. View By ID");
-        System.out.println("4. Update");
-        System.out.println("5. Delete");
+
+        String role = UserSession.getCurrentUser().getRole();
+
+        if ("STUDENT".equalsIgnoreCase(role)) {
+            System.out.println("1. Add");
+            System.out.println("2. View Schedules");
+
+        } else if ("ADMIN".equalsIgnoreCase(role)) {
+            System.out.println("1. Add");
+            System.out.println("2. View All Schedules");
+            System.out.println("3. View By ID");
+            System.out.println("4. Update");
+            System.out.println("5. Delete");
+
+        }
+
         System.out.println("0. Back");
         System.out.print("Choice: ");
 
         return Integer.parseInt(scanner.nextLine());
     }
-
     public StudentSchedule addNewStudentSchedule(List<Schedule> schedules) {
 
         System.out.println("\n===== ADD SCHEDULE =====");
@@ -121,8 +131,49 @@ public class StudentScheduleView {
 
         System.out.println("\n===== STUDENT SCHEDULE LIST =====");
 
-        for (StudentSchedule studentSchedule : studentSchedules) {
-            displayStudentSchedule(studentSchedule);
+        // Adjusted column widths to accommodate names and titles
+        int idW = 4, crsCdW = 10, crsTitW = 30, teachW = 18, dateW = 10, timeW = 13, termW = 25;
+
+        String border = "+" + repeat("-", idW + 2) + "+" +
+                repeat("-", crsCdW + 2) + "+" +
+                repeat("-", crsTitW + 2) + "+" +
+                repeat("-", teachW + 2) + "+" +
+                repeat("-", dateW + 2) + "+" +
+                repeat("-", timeW + 2) + "+" +
+                repeat("-", termW + 2) + "+";
+
+        String rowFormat = "| %-" + idW + "s | %-" + crsCdW + "s | %-" + crsTitW + "s | %-" + teachW + "s | %-" + dateW + "s | %-" + timeW + "s | %-" + termW + "s |%n";
+
+        // Print Header
+        System.out.println(border);
+        System.out.format(rowFormat, "ID", "Code", "Course Title", "Teacher", "Date", "Time", "Term");
+        System.out.println(border);
+
+        // Print Rows
+        for (StudentSchedule ss : studentSchedules) {
+
+            // Format the term (e.g., "2023-2024 / 1st") to fit in one column
+            String termStr = ss.getAcademicYear() + " " + ss.getSemester();
+            if (termStr.length() > termW) termStr = termStr.substring(0, termW); // Truncate if too long
+
+            // Format course title to not break the table if it's too long
+            String titleStr = ss.getCourseTitle();
+            if (titleStr.length() > crsTitW) titleStr = titleStr.substring(0, crsTitW - 3) + "...";
+
+            // Combine start and end time (e.g., "08:00 - 09:30")
+            String timeStr = ss.getStartTime() + "-" + ss.getEndTime();
+
+            System.out.format(rowFormat,
+                    ss.getId(),
+                    ss.getCourseCode(),
+                    titleStr,
+                    ss.getTeacherName(),
+                    ss.getDate(),
+                    timeStr,
+                    termStr
+            );
         }
+
+        System.out.println(border);
     }
 }

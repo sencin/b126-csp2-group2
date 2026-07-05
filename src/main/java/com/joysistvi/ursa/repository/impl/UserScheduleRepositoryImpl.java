@@ -35,8 +35,26 @@ public class UserScheduleRepositoryImpl implements UserScheduleRepository {
     public List<StudentSchedule> getStudentSchedulesByStudentId(int studentId) throws SQLException {
         List<StudentSchedule> studentSchedules = new ArrayList<>();
 
-        // Changed students_schedules to users_schedules and student_id to user_id
-        String sql = "SELECT * FROM users_schedules WHERE user_id = ?";
+        String sql =
+                "SELECT " +
+                        "    us.id, " +
+                        "    us.user_id, " +
+                        "    CONCAT(st.first_name, ' ', st.last_name) AS student_name, " +
+                        "    us.schedules_id, " +
+                        "    c.course_code, " +
+                        "    c.course_title, " +
+                        "    CONCAT(t.first_name, ' ', t.last_name) AS teacher_name, " +
+                        "    s.date, " +
+                        "    s.start_time, " +
+                        "    s.end_time, " +
+                        "    us.academic_year, " +
+                        "    us.semester " +
+                        "FROM users_schedules us " +
+                        "INNER JOIN users st ON us.user_id = st.id " +
+                        "INNER JOIN schedules s ON us.schedules_id = s.id " +
+                        "INNER JOIN courses c ON s.courses_id = c.id " +
+                        "INNER JOIN users t ON s.teacher_id = t.id " +
+                        "WHERE us.user_id = ?";
 
         try (Connection conn = DbConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -45,10 +63,18 @@ public class UserScheduleRepositoryImpl implements UserScheduleRepository {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
+                    // Use Constructor 2 with all the fetched data
                     studentSchedules.add(new StudentSchedule(
                             rs.getInt("id"),
-                            rs.getInt("user_id"), // Fetching from user_id column
+                            rs.getInt("user_id"),
+                            rs.getString("student_name"),
                             rs.getInt("schedules_id"),
+                            rs.getString("course_code"),
+                            rs.getString("course_title"),
+                            rs.getString("teacher_name"),
+                            rs.getDate("date").toLocalDate(),
+                            rs.getTime("start_time").toLocalTime(),
+                            rs.getTime("end_time").toLocalTime(),
                             rs.getString("academic_year"),
                             rs.getString("semester")
                     ));
@@ -58,7 +84,6 @@ public class UserScheduleRepositoryImpl implements UserScheduleRepository {
 
         return studentSchedules;
     }
-
     @Override
     public StudentSchedule getStudentScheduleById(int id) throws SQLException {
         // Changed students_schedules to users_schedules

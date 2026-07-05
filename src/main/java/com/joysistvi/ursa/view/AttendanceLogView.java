@@ -1,6 +1,7 @@
 package com.joysistvi.ursa.view;
 
 import com.joysistvi.ursa.model.AttendanceLog;
+import com.joysistvi.ursa.model.Schedule;
 import com.joysistvi.ursa.service.UserSession;
 
 import java.time.LocalDateTime;
@@ -12,15 +13,14 @@ import static com.joysistvi.ursa.utils.ConsoleTableUtils.repeat;
 public class AttendanceLogView {
 
     private final Scanner scanner = new Scanner(System.in);
+    private  final ScheduleView scheduleView = new ScheduleView();
 
     public int menu() {
 
         String role = UserSession.getCurrentUser().getRole().toUpperCase();
 
-        System.out.println("\n===== ATTENDANCE LOGS =====");
-
         if ("STUDENT".equals(role)) {
-            System.out.println("1. Add");
+            System.out.println("1. Time In/Out");
             System.out.println("2. View By Schedule");
             System.out.println("3. View By ID");
             System.out.println("0. Back");
@@ -42,17 +42,15 @@ public class AttendanceLogView {
     }
 
     // CREATE
-    public AttendanceLog addNewAttendanceLog() {
-
+    public AttendanceLog addNewAttendanceLog(List<Schedule> schedules) {
         System.out.println("\n===== ADD ATTENDANCE LOG =====");
+        int studentId = UserSession.getCurrentUser().getId();
 
-        System.out.print("Student ID: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
-
+        scheduleView.displaySchedules(schedules);
         System.out.print("Schedule ID: ");
         int scheduleId = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("Action: ");
+        System.out.print("Action (e.g., IN, OUT): ");
         String action = scanner.nextLine();
 
         return new AttendanceLog(
@@ -63,7 +61,6 @@ public class AttendanceLogView {
                 action
         );
     }
-
     // UPDATE
     public AttendanceLog updateAttendanceLog() {
 

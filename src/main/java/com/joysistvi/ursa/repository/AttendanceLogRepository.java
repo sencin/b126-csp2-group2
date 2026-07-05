@@ -1,6 +1,7 @@
 package com.joysistvi.ursa.repository;
 
 import com.joysistvi.ursa.model.AttendanceLog;
+import com.joysistvi.ursa.model.Schedule;
 
 import java.sql.SQLException;
 import java.util.List;

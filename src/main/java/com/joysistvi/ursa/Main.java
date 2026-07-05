@@ -25,15 +25,17 @@ public class Main {
                 new CourseService());
 
         GuardianController guardianController = new GuardianController(new GuardianService(), new GuardianView());
-        StudentScheduleController studentScheduleController = new StudentScheduleController(
-                new StudentScheduleService(),
-                new StudentScheduleView(),
+        UserScheduleController userScheduleController = new UserScheduleController(
+                new UserScheduleService(),
+                new UserScheduleView(),
                 new ScheduleService()
         );
 
         AttendanceLogController attendanceLogController = new AttendanceLogController(
                 new AttendanceLogService(),
-                new AttendanceLogView());
+                new AttendanceLogView(),
+                new ScheduleService()
+        );
 
         LoginController loginController = new LoginController(
                 new LoginService(),
@@ -79,7 +81,7 @@ public class Main {
                                 break;
 
                             case 5:
-                                studentScheduleController.start();
+                                userScheduleController.start();
                                 break;
 
                             case 6:
@@ -161,7 +163,7 @@ public class Main {
                                 break;
 
                             case 3:
-                                studentScheduleController.start();
+                                userScheduleController.start();
                                 break;
 
                             case 4:

@@ -3,23 +3,23 @@ package com.joysistvi.ursa.controller;
 import com.joysistvi.ursa.model.Schedule;
 import com.joysistvi.ursa.model.StudentSchedule;
 import com.joysistvi.ursa.service.ScheduleService;
-import com.joysistvi.ursa.service.StudentScheduleService;
+import com.joysistvi.ursa.service.UserScheduleService;
 import com.joysistvi.ursa.service.UserSession;
-import com.joysistvi.ursa.view.StudentScheduleView;
+import com.joysistvi.ursa.view.UserScheduleView;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class StudentScheduleController {
+public class UserScheduleController {
 
-    private final StudentScheduleService studentScheduleService;
-    private final StudentScheduleView studentScheduleView;
+    private final UserScheduleService userScheduleService;
+    private final UserScheduleView userScheduleView;
     private  final ScheduleService scheduleService;
 
 
-    public StudentScheduleController(StudentScheduleService studentScheduleService, StudentScheduleView studentScheduleView, ScheduleService scheduleService) {
-        this.studentScheduleService = studentScheduleService;
-        this.studentScheduleView = studentScheduleView;
+    public UserScheduleController(UserScheduleService userScheduleService, UserScheduleView userScheduleView, ScheduleService scheduleService) {
+        this.userScheduleService = userScheduleService;
+        this.userScheduleView = userScheduleView;
         this.scheduleService = scheduleService;
     }
 
@@ -28,7 +28,7 @@ public class StudentScheduleController {
 
         while (running) {
 
-            int choice = studentScheduleView.menu();
+            int choice = userScheduleView.menu();
 
             try {
                 switch (choice) {
@@ -70,34 +70,35 @@ public class StudentScheduleController {
 
     private void addStudentSchedule() throws SQLException {
         List<Schedule> schedules = scheduleService.getAllSchedules();
-        StudentSchedule studentSchedule = studentScheduleView.addNewStudentSchedule(schedules);
-        studentScheduleService.addStudentSchedule(studentSchedule);
+        StudentSchedule studentSchedule = userScheduleView.addNewStudentSchedule(schedules);
+        userScheduleService.addStudentSchedule(studentSchedule);
         System.out.println("Student schedule added successfully.");
     }
 
     private void viewStudentSchedulesByStudent() throws SQLException {
-
-        int studentId = studentScheduleView.readStudentId();
-
-        List<StudentSchedule> studentSchedules =
-                studentScheduleService.getStudentSchedulesByStudentId(studentId);
-
-        studentScheduleView.displayStudentSchedules(studentSchedules);
+        int studentId = UserSession.getCurrentUser().getId();
+        List<StudentSchedule> studentSchedules = userScheduleService.getStudentSchedulesByStudentId(studentId);
+        userScheduleView.displayStudentSchedules(studentSchedules);
     }
 
     private void viewStudentScheduleById() throws SQLException {
 
-        int id = studentScheduleView.readStudentScheduleId();
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
+
+        int id = userScheduleView.readStudentScheduleId();
 
         StudentSchedule studentSchedule =
-                studentScheduleService.getStudentScheduleById(id);
+                userScheduleService.getStudentScheduleById(id);
 
         if (studentSchedule == null) {
             System.out.println("Student schedule not found.");
             return;
         }
 
-        studentScheduleView.displayStudentSchedule(studentSchedule);
+        userScheduleView.displayStudentSchedule(studentSchedule);
     }
 
     private void updateStudentSchedule() throws SQLException {
@@ -108,9 +109,9 @@ public class StudentScheduleController {
         }
 
         StudentSchedule studentSchedule =
-                studentScheduleView.updateStudentSchedule();
+                userScheduleView.updateStudentSchedule();
 
-        studentScheduleService.updateStudentSchedule(studentSchedule);
+        userScheduleService.updateStudentSchedule(studentSchedule);
 
         System.out.println("Student schedule updated successfully.");
     }
@@ -122,9 +123,9 @@ public class StudentScheduleController {
             return;
         }
 
-        int id = studentScheduleView.readStudentScheduleId();
+        int id = userScheduleView.readStudentScheduleId();
 
-        studentScheduleService.deleteStudentSchedule(id);
+        userScheduleService.deleteStudentSchedule(id);
 
         System.out.println("Student schedule deleted successfully.");
     }

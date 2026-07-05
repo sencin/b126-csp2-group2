@@ -27,6 +27,9 @@ public class ScheduleService {
         return scheduleRepository.getScheduleById(id);
     }
 
+    public List<Schedule> getEnrolledSchedulesByStudentId(int id) throws SQLException{
+        return scheduleRepository.getEnrolledSchedulesByStudentId(id);
+    }
     public void updateSchedule(Schedule schedule) throws SQLException {
         scheduleRepository.updateSchedule(schedule);
     }
