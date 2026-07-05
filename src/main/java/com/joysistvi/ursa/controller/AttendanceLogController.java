@@ -2,6 +2,7 @@ package com.joysistvi.ursa.controller;
 
 import com.joysistvi.ursa.model.AttendanceLog;
 import com.joysistvi.ursa.model.Schedule;
+import com.joysistvi.ursa.model.User;
 import com.joysistvi.ursa.service.AttendanceLogService;
 import com.joysistvi.ursa.service.ScheduleService;
 import com.joysistvi.ursa.service.UserSession;
@@ -68,6 +69,11 @@ public class AttendanceLogController {
     }
 
     private void addAttendanceLog() throws SQLException {
+        if (!"STUDENT".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
+
         int studentId = UserSession.getCurrentUser().getId();
         List<Schedule> schedules = scheduleService.getEnrolledSchedulesByStudentId(studentId);
         AttendanceLog attendanceLog = attendanceLogView.addNewAttendanceLog(schedules);
@@ -77,17 +83,34 @@ public class AttendanceLogController {
     }
 
     private void viewAttendanceLogsBySchedule() throws SQLException {
-        int studentId = UserSession.getCurrentUser().getId();
-        List<Schedule> schedules = scheduleService.getEnrolledSchedulesByStudentId(studentId);
+        User currentUser = UserSession.getCurrentUser();
+        int userId = currentUser.getId();
+        String role = currentUser.getRole();
+
+        List<Schedule> schedules;
+
+        if ("STUDENT".equalsIgnoreCase(role)) {
+            schedules = scheduleService.getEnrolledSchedulesByStudentId(userId);
+        } else if ("TEACHER".equalsIgnoreCase(role)) {
+            schedules = scheduleService.getSchedulesByTeacher(userId);
+        } else {
+            schedules = scheduleService.getAllSchedules();
+        }
+        if (schedules.isEmpty()) {
+            System.out.println("No schedules found for your profile account.");
+            return;
+        }
 
         int scheduleId = attendanceLogView.readScheduleId(schedules);
-
         List<AttendanceLog> attendanceLogs = attendanceLogService.getAttendanceLogsByScheduleId(scheduleId);
-
         attendanceLogView.displayAttendanceLogs(attendanceLogs);
     }
 
     private void viewAttendanceLogById() throws SQLException {
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
 
         int id = attendanceLogView.readAttendanceLogId();
 

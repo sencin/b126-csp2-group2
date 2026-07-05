@@ -26,7 +26,6 @@ public class AttendanceLogView {
             System.out.println("0. Back");
         } else if ("TEACHER".equals(role)) {
             System.out.println("2. View By Schedule");
-            System.out.println("3. View By ID");
             System.out.println("0. Back");
         } else { // ADMIN
             System.out.println("1. Add");
