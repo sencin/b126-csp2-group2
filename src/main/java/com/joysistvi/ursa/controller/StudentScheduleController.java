@@ -2,6 +2,7 @@ package com.joysistvi.ursa.controller;
 
 import com.joysistvi.ursa.model.StudentSchedule;
 import com.joysistvi.ursa.service.StudentScheduleService;
+import com.joysistvi.ursa.service.UserSession;
 import com.joysistvi.ursa.view.StudentScheduleView;
 
 import java.sql.SQLException;
@@ -100,6 +101,11 @@ public class StudentScheduleController {
 
     private void updateStudentSchedule() throws SQLException {
 
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
+
         StudentSchedule studentSchedule =
                 studentScheduleView.updateStudentSchedule();
 
@@ -109,6 +115,11 @@ public class StudentScheduleController {
     }
 
     private void deleteStudentSchedule() throws SQLException {
+
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
 
         int id = studentScheduleView.readStudentScheduleId();
 

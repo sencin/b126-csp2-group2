@@ -1,6 +1,7 @@
 package com.joysistvi.ursa.view;
 
 import com.joysistvi.ursa.model.Course;
+import com.joysistvi.ursa.service.UserSession;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,12 +14,23 @@ public class CourseView {
     private final Scanner scanner = new Scanner(System.in);
 
     public int menu() {
+
+        String role = UserSession.getCurrentUser().getRole();
+
         System.out.println("\n===== COURSES =====");
-        System.out.println("1. Add");
+
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            System.out.println("1. Add");
+        }
+
         System.out.println("2. View All");
         System.out.println("3. View By ID");
-        System.out.println("4. Update");
-        System.out.println("5. Delete");
+
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            System.out.println("4. Update");
+            System.out.println("5. Delete");
+        }
+
         System.out.println("0. Back");
         System.out.print("Choice: ");
 

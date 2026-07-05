@@ -2,6 +2,7 @@ package com.joysistvi.ursa.controller;
 
 import com.joysistvi.ursa.model.Course;
 import com.joysistvi.ursa.service.CourseService;
+import com.joysistvi.ursa.service.UserSession;
 import com.joysistvi.ursa.view.CourseView;
 
 import java.sql.SQLException;
@@ -65,6 +66,11 @@ public class CourseController {
 
     private void addCourse() throws SQLException {
 
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied. Only administrators can add courses.");
+            return;
+        }
+
         Course course = courseView.addNewCourse();
 
         courseService.addCourse(course);
@@ -92,6 +98,11 @@ public class CourseController {
 
     private void updateCourse() throws SQLException {
 
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
+
         Course course = courseView.updateCourse();
 
         courseService.updateCourse(course);
@@ -100,6 +111,11 @@ public class CourseController {
     }
 
     private void deleteCourse() throws SQLException {
+
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
 
         int id = courseView.readCourseId();
 

@@ -1,6 +1,7 @@
 package com.joysistvi.ursa.view;
 
 import com.joysistvi.ursa.model.AttendanceLog;
+import com.joysistvi.ursa.service.UserSession;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,15 +14,30 @@ public class AttendanceLogView {
     private final Scanner scanner = new Scanner(System.in);
 
     public int menu() {
-        System.out.println("\n===== ATTENDANCE LOGS =====");
-        System.out.println("1. Add");
-        System.out.println("2. View By Schedule");
-        System.out.println("3. View By ID");
-        System.out.println("4. Update");
-        System.out.println("5. Delete");
-        System.out.println("0. Back");
-        System.out.print("Choice: ");
 
+        String role = UserSession.getCurrentUser().getRole().toUpperCase();
+
+        System.out.println("\n===== ATTENDANCE LOGS =====");
+
+        if ("STUDENT".equals(role)) {
+            System.out.println("1. Add");
+            System.out.println("2. View By Schedule");
+            System.out.println("3. View By ID");
+            System.out.println("0. Back");
+        } else if ("TEACHER".equals(role)) {
+            System.out.println("2. View By Schedule");
+            System.out.println("3. View By ID");
+            System.out.println("0. Back");
+        } else { // ADMIN
+            System.out.println("1. Add");
+            System.out.println("2. View By Schedule");
+            System.out.println("3. View By ID");
+            System.out.println("4. Update");
+            System.out.println("5. Delete");
+            System.out.println("0. Back");
+        }
+
+        System.out.print("Choice: ");
         return Integer.parseInt(scanner.nextLine());
     }
 

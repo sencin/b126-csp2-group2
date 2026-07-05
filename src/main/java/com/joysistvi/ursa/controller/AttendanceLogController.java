@@ -2,6 +2,7 @@ package com.joysistvi.ursa.controller;
 
 import com.joysistvi.ursa.model.AttendanceLog;
 import com.joysistvi.ursa.service.AttendanceLogService;
+import com.joysistvi.ursa.service.UserSession;
 import com.joysistvi.ursa.view.AttendanceLogView;
 
 import java.sql.SQLException;
@@ -99,6 +100,11 @@ public class AttendanceLogController {
 
     private void updateAttendanceLog() throws SQLException {
 
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
+
         AttendanceLog attendanceLog =
                 attendanceLogView.updateAttendanceLog();
 
@@ -108,6 +114,11 @@ public class AttendanceLogController {
     }
 
     private void deleteAttendanceLog() throws SQLException {
+
+        if (!"ADMIN".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
+            System.out.println("Access denied.");
+            return;
+        }
 
         int id = attendanceLogView.readAttendanceLogId();
 
