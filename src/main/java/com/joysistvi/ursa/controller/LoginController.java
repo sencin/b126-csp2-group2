@@ -3,6 +3,7 @@ package com.joysistvi.ursa.controller;
 import com.joysistvi.ursa.model.Login;
 import com.joysistvi.ursa.model.User;
 import com.joysistvi.ursa.service.LoginService;
+import com.joysistvi.ursa.service.UserSession;
 import com.joysistvi.ursa.view.LoginView;
 
 import java.sql.SQLException;
@@ -26,6 +27,8 @@ public class LoginController {
                 System.out.println("Invalid email or password.");
                 return null;
             }
+
+            UserSession.login(user);
 
             System.out.println("Welcome, " + user.getFirstName() + "!");
             return user;
