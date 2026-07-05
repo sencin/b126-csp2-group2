@@ -93,11 +93,12 @@ public class DbConnection {
                 "CREATE TABLE IF NOT EXISTS schedules (" +
                         "id INT AUTO_INCREMENT PRIMARY KEY, " +
                         "courses_id INT NOT NULL, " +
-                        "instructor_name VARCHAR(150) NOT NULL, " +
+                        "teacher_id INT NOT NULL, " +
                         "date DATE NOT NULL, " +
                         "start_time TIME NOT NULL, " +
                         "end_time TIME NOT NULL, " +
-                        "FOREIGN KEY (courses_id) REFERENCES courses(id)" +
+                        "FOREIGN KEY (courses_id) REFERENCES courses(id), " +
+                        "FOREIGN KEY (teacher_id) REFERENCES users(id)" +
                         ")"
         );
 
