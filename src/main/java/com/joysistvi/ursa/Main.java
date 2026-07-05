@@ -85,6 +85,7 @@ public class Main {
                                 break;
 
                             case 0:
+                                UserSession.logout();
                                 adminRunning = false;
                                 System.out.println("Logged out.");
                                 break;
@@ -120,6 +121,7 @@ public class Main {
                                 break;
 
                             case 0:
+                                UserSession.logout();
                                 teacherRunning = false;
                                 System.out.println("Logged out.");
                                 break;
@@ -165,6 +167,7 @@ public class Main {
                                 break;
 
                             case 0:
+                                UserSession.logout();
                                 studentRunning = false;
                                 System.out.println("Logged out.");
                                 break;
