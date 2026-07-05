@@ -11,7 +11,7 @@ public class DbConnection {
     private static final String URL = HOST_URL + DATABASE;
 
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "";
 
     private static final DbConnection INSTANCE = new DbConnection();
 
