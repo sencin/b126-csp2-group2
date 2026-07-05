@@ -21,6 +21,12 @@ public class LoginController {
     public User login() {
         try {
             Login login = loginView.login();
+
+            if (login == null) {
+                System.out.println("Goodbye!");
+                System.exit(0);
+            }
+
             User user = loginService.authenticate(login);
 
             if (user == null) {

@@ -69,7 +69,7 @@ public class AttendanceLogController {
 
     private void addAttendanceLog() throws SQLException {
         if (!"STUDENT".equalsIgnoreCase(UserSession.getCurrentUser().getRole())) {
-            System.out.println("Access denied.");
+            System.out.println("Access denied. Only Students can Add Attendance");
             return;
         }
 
