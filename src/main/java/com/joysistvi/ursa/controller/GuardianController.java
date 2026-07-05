@@ -2,6 +2,7 @@ package com.joysistvi.ursa.controller;
 
 import com.joysistvi.ursa.model.Guardian;
 import com.joysistvi.ursa.service.GuardianService;
+import com.joysistvi.ursa.service.UserSession;
 import com.joysistvi.ursa.view.GuardianView;
 
 import java.sql.SQLException;
@@ -73,12 +74,8 @@ public class GuardianController {
     }
 
     private void viewGuardiansByStudentId() throws SQLException {
-
-        int studentId = guardianView.readStudentId();
-
-        List<Guardian> guardians =
-                guardianService.getGuardiansByStudentId(studentId);
-
+        int studentId = UserSession.getCurrentUser().getId();
+        List<Guardian> guardians = guardianService.getGuardiansByStudentId(studentId);
         guardianView.displayGuardians(guardians);
     }
 

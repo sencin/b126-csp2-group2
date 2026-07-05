@@ -9,6 +9,8 @@ public class Guardian {
     private final String relationship;
     private final String phoneNumber;
 
+    private String studentFullName;
+
     public Guardian(int id,
                     int studentId,
                     String firstName,
@@ -45,5 +47,13 @@ public class Guardian {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getStudentFullName() {
+        return studentFullName;
+    }
+
+    public void setStudentFullName(String studentFullName) {
+        this.studentFullName = studentFullName;
     }
 }

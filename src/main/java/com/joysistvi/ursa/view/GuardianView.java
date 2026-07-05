@@ -1,5 +1,7 @@
 package com.joysistvi.ursa.view;
 import com.joysistvi.ursa.model.Guardian;
+import com.joysistvi.ursa.service.UserSession;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,23 +26,14 @@ public class GuardianView {
 
     // CREATE
     public Guardian addNewGuardian() {
-
         System.out.println("\n===== ADD GUARDIAN =====");
 
-        System.out.print("Student ID: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
+        int studentId = UserSession.getCurrentUser().getId();
 
-        System.out.print("First Name: ");
-        String firstName = scanner.nextLine();
-
-        System.out.print("Last Name: ");
-        String lastName = scanner.nextLine();
-
-        System.out.print("Relationship: ");
-        String relationship = scanner.nextLine();
-
-        System.out.print("Phone Number: ");
-        String phoneNumber = scanner.nextLine();
+        String firstName = readMandatoryString("First Name: ");
+        String lastName = readMandatoryString("Last Name: ");
+        String relationship = readMandatoryString("Relationship (e.g., Mother, Father, Guardian): ");
+        String phoneNumber = readMandatoryString("Phone Number: ");
 
         return new Guardian(
                 0,
@@ -52,28 +45,29 @@ public class GuardianView {
         );
     }
 
-    // UPDATE
-    public Guardian updateGuardian() {
+    private String readMandatoryString(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                return input;
+            }
+            System.out.println("Error: This field cannot be empty.");
+        }
+    }
 
+    public Guardian updateGuardian() {
         System.out.println("\n===== UPDATE GUARDIAN =====");
 
-        System.out.print("Guardian ID: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = readMandatoryGuardianId();
+        if (id == -1) return null;
 
-        System.out.print("Student ID: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
+        int studentId = UserSession.getCurrentUser().getId();
 
-        System.out.print("First Name: ");
-        String firstName = scanner.nextLine();
-
-        System.out.print("Last Name: ");
-        String lastName = scanner.nextLine();
-
-        System.out.print("Relationship: ");
-        String relationship = scanner.nextLine();
-
-        System.out.print("Phone Number: ");
-        String phoneNumber = scanner.nextLine();
+        String firstName = readOptionalString("First Name (Press Enter to keep existing): ");
+        String lastName = readOptionalString("Last Name (Press Enter to keep existing): ");
+        String relationship = readOptionalString("Relationship (Press Enter to keep existing): ");
+        String phoneNumber = readOptionalString("Phone Number (Press Enter to keep existing): ");
 
         return new Guardian(
                 id,
@@ -85,15 +79,33 @@ public class GuardianView {
         );
     }
 
+    private int readMandatoryGuardianId() {
+        while (true) {
+            System.out.print("Guardian ID: ");
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Error: Guardian ID is required.");
+                return -1;
+            }
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Please enter a valid numeric ID.");
+            }
+        }
+    }
+
+    private String readOptionalString(String prompt) {
+        System.out.print(prompt);
+        String input = scanner.nextLine().trim();
+        return input.isEmpty() ? null : input;
+    }
+
     public int readGuardianId() {
         System.out.print("Enter Guardian ID: ");
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public int readStudentId() {
-        System.out.print("Enter Student ID: ");
-        return Integer.parseInt(scanner.nextLine());
-    }
 
     public void displayGuardian(Guardian guardian) {
 
@@ -126,10 +138,10 @@ public class GuardianView {
         }
 
         int idW = 5;
-        int nameW = 40;
+        int nameW = 30;
         int contactW = 15;
         int relationW = 15;
-        int studentW = 10;
+        int studentW = 30;
 
         String border = "+" + repeat("-", idW + 2) + "+" +
                 repeat("-", nameW + 2) + "+" +
@@ -141,16 +153,23 @@ public class GuardianView {
 
         System.out.println("\n===== GUARDIAN LIST =====");
         System.out.println(border);
-        System.out.format(rowFormat, "ID", "Name", "Contact", "Relationship", "Student");
+
+
+        System.out.format(rowFormat, "ID", "Guardian Name", "Contact", "Relationship", "Student Name");
         System.out.println(border);
 
         for (Guardian guardian : guardians) {
+
+            String studentDisplay = guardian.getStudentFullName() != null
+                    ? guardian.getStudentFullName()
+                    : String.valueOf(guardian.getStudentId());
+
             System.out.format(rowFormat,
                     guardian.getId(),
                     guardian.getFirstName() + " " + guardian.getLastName(),
                     guardian.getPhoneNumber(),
                     guardian.getRelationship(),
-                    guardian.getStudentId()
+                    studentDisplay
             );
         }
 
