@@ -178,4 +178,40 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             stmt.executeUpdate();
         }
     }
+
+    @Override
+    public List<Schedule> getSchedulesByTeacherId(int teacherId) throws SQLException {
+        List<Schedule> schedules = new ArrayList<>();
+
+        // Join with courses and users to get readable names
+        String sql = "SELECT s.id, s.courses_id, c.course_title, s.teacher_id, " +
+                "CONCAT(u.first_name, ' ', u.last_name) AS instructor_name, " +
+                "s.date, s.start_time, s.end_time " +
+                "FROM schedules s " +
+                "INNER JOIN courses c ON s.courses_id = c.id " +
+                "INNER JOIN users u ON s.teacher_id = u.id " +
+                "WHERE s.teacher_id = ? ";
+
+        try (Connection conn = DbConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, teacherId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    schedules.add(new Schedule(
+                            rs.getInt("id"),
+                            rs.getInt("courses_id"),
+                            rs.getString("course_title"),
+                            rs.getInt("teacher_id"),
+                            rs.getString("instructor_name"),
+                            rs.getDate("date").toLocalDate(),
+                            rs.getTime("start_time").toLocalTime(),
+                            rs.getTime("end_time").toLocalTime()
+                    ));
+                }
+            }
+        }
+        return schedules;
+    }
 }

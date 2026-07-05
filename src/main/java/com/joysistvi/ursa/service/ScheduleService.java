@@ -37,4 +37,7 @@ public class ScheduleService {
     public void deleteSchedule(int id) throws SQLException {
         scheduleRepository.deleteSchedule(id);
     }
+    public List<Schedule> getSchedulesByTeacher(int teacherId) throws SQLException {
+        return scheduleRepository.getSchedulesByTeacherId(teacherId);
+    }
 }

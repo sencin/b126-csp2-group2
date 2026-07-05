@@ -18,4 +18,5 @@ public interface ScheduleRepository {
     void updateSchedule(Schedule schedule) throws SQLException;
 
     void deleteSchedule(int id) throws SQLException;
+    List<Schedule> getSchedulesByTeacherId(int teacherId) throws SQLException;
 }

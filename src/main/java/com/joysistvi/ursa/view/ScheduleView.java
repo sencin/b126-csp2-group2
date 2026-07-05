@@ -22,7 +22,7 @@ public class ScheduleView {
         System.out.println("\n===== SCHEDULES =====");
         System.out.println("1. Add");
         System.out.println("2. View All");
-        System.out.println("3. View By ID");
+        System.out.println("3. View My Schedules");
         System.out.println("4. Update");
         System.out.println("5. Delete");
         System.out.println("0. Back");
@@ -32,7 +32,7 @@ public class ScheduleView {
     }
 
     public Schedule addNewSchedule(List<Course> courses) {
-        System.out.println("\n===== Available Schedules =====");
+        System.out.println("\n===== Available Courses =====");
         courseView.displayCourses(courses);
         System.out.print("Course ID: ");
         int courseId = Integer.parseInt(scanner.nextLine());
@@ -93,33 +93,6 @@ public class ScheduleView {
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public void displaySchedule(Schedule schedule) {
-        int idW = 5, crsW = 8, instW = 15, dateW = 10, startW = 8, endW = 8;
-
-
-        String border = "+" + repeat("-", idW + 2) + "+" +
-                repeat("-", crsW + 2) + "+" +
-                repeat("-", instW + 2) + "+" +
-                repeat("-", dateW + 2) + "+" +
-                repeat("-", startW + 2) + "+" +
-                repeat("-", endW + 2) + "+";
-
-
-        String rowFormat = "| %-" + idW + "s | %-" + crsW + "s | %-" + instW + "s | %-" + dateW + "s | %-" + startW + "s | %-" + endW + "s |%n";
-
-        System.out.println(border);
-        System.out.format(rowFormat, "ID", "Course ID", "Instructor", "Date", "Start", "End");
-        System.out.println(border);
-        System.out.format(rowFormat,
-                schedule.getId(),
-                schedule.getCourseId(),
-                schedule.getInstructorName(),
-                schedule.getDate(),
-                schedule.getStartTime(),
-                schedule.getEndTime()
-        );
-        System.out.println(border);
-    }
     public void displaySchedules(List<Schedule> schedules) {
 
         if (schedules == null || schedules.isEmpty()) {

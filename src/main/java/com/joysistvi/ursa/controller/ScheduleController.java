@@ -5,6 +5,7 @@ import com.joysistvi.ursa.model.Schedule;
 import com.joysistvi.ursa.service.CourseService;
 import com.joysistvi.ursa.service.ScheduleService;
 import com.joysistvi.ursa.service.UserService;
+import com.joysistvi.ursa.service.UserSession;
 import com.joysistvi.ursa.view.ScheduleView;
 
 import java.sql.SQLException;
@@ -86,16 +87,14 @@ public class ScheduleController {
 
     private void viewScheduleById() throws SQLException {
 
-        int id = scheduleView.readScheduleId();
+      int id =  UserSession.getCurrentUser().getId();
+        List<Schedule> schedules = scheduleService.getSchedulesByTeacher(id);
 
-        Schedule schedule = scheduleService.getScheduleById(id);
-
-        if (schedule == null) {
-            System.out.println("Schedule not found.");
+        if (schedules.isEmpty()) {
+            System.out.println("No schedules found for your profile.");
             return;
         }
-
-        scheduleView.displaySchedule(schedule);
+        scheduleView.displaySchedules(schedules);
     }
 
     private void updateSchedule() throws SQLException {
