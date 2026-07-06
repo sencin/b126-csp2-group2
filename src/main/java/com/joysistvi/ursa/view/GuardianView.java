@@ -20,11 +20,9 @@ public class GuardianView {
         System.out.println("5. Delete");
         System.out.println("0. Back");
         System.out.print("Choice: ");
-
         return Integer.parseInt(scanner.nextLine());
     }
 
-    // CREATE
     public Guardian addNewGuardian() {
         System.out.println("\n===== ADD GUARDIAN =====");
 
@@ -56,10 +54,10 @@ public class GuardianView {
         }
     }
 
-    public Guardian updateGuardian() {
+    public Guardian updateGuardian(List<Guardian> guardians) {
         System.out.println("\n===== UPDATE GUARDIAN =====");
 
-        int id = readMandatoryGuardianId();
+        int id = readMandatoryGuardianId(guardians);
         if (id == -1) return null;
 
         int studentId = UserSession.getCurrentUser().getId();
@@ -79,16 +77,22 @@ public class GuardianView {
         );
     }
 
-    private int readMandatoryGuardianId() {
+    private int readMandatoryGuardianId(List<Guardian> guardians) {
+        displayGuardians(guardians);
+
         while (true) {
-            System.out.print("Guardian ID: ");
+            System.out.print("Guardian ID to update (or press Enter to cancel): ");
             String input = scanner.nextLine().trim();
+
             if (input.isEmpty()) {
-                System.out.println("Error: Guardian ID is required.");
                 return -1;
             }
             try {
-                return Integer.parseInt(input);
+                int id = Integer.parseInt(input);
+                if (guardians.stream().anyMatch(g -> g.getId() == id)) {
+                    return id;
+                }
+                System.out.println("Error: That Guardian ID does not exist in the list.");
             } catch (NumberFormatException e) {
                 System.out.println("Error: Please enter a valid numeric ID.");
             }

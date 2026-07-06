@@ -93,9 +93,9 @@ public class GuardianController {
     }
 
     private void updateGuardian() throws SQLException {
-
-        Guardian guardian = guardianView.updateGuardian();
-
+        int studentId = UserSession.getCurrentUser().getId();
+        List<Guardian> guardians = guardianService.getGuardiansByStudentId(studentId);
+        Guardian guardian = guardianView.updateGuardian(guardians);
         guardianService.updateGuardian(guardian);
 
         System.out.println("Guardian updated successfully.");
